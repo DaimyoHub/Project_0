@@ -1,0 +1,7 @@
+(executable
+ (name game_js)
+ (modes js)
+ (modules game_js)
+ (promote (until-clean))
+ (preprocess (pps js_of_ocaml-ppx))
+ (libraries game js_of_ocaml gfx_jsoo))
