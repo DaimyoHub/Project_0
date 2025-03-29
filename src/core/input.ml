@@ -18,12 +18,17 @@ let handle_input () =
       if has_key key then action ()) action_table
 
 let () =
-  register "e" (fun () -> Player.(move_player (player1()) Cst.paddle_v_up));
-  register "d" (fun () -> Player.(move_player (player1()) Cst.paddle_v_down));
-  register "u" (fun () -> Player.(move_player (player2()) Cst.paddle_v_up));
-  register "j" (fun () -> Player.(move_player (player2()) Cst.paddle_v_down));
-  register "g" Ball.restart;
-  register "s" (fun () ->
-      let global = Global.get () in
-      global.waiting <- 1;
-    )
+  register "m" (fun () -> Global.set_game_state Game_state.Menu);
+  register "p" (fun () -> Global.set_game_state Game_state.Game);
+
+  register "y" (fun () -> Player.(move_player (player1()) Cst.j1_v_up));
+  register "h" (fun () -> Player.(move_player (player1()) Cst.j1_v_down));
+  register "g" (fun () -> Player.(move_player (player1()) Cst.j1_v_left));
+  register "j" (fun () -> Player.(move_player (player1()) Cst.j1_v_right));
+  register "t" (fun () -> Player.(jump_player (player1()) (Unix.gettimeofday ())));
+  
+  register "z" (fun () -> Player.(move_player (player2()) Cst.j2_v_up));
+  register "s" (fun () -> Player.(move_player (player2()) Cst.j2_v_down));
+  register "q" (fun () -> Player.(move_player (player2()) Cst.j2_v_left));
+  register "d" (fun () -> Player.(move_player (player2()) Cst.j2_v_right));
+  register "a" (fun () -> Player.(jump_player (player2()) (Unix.gettimeofday ())));

@@ -10,7 +10,7 @@ let update _dt el =
   let surface = Gfx.get_surface window in
   let ww, wh = Gfx.get_context_logical_size ctx in
 
-  Gfx.set_color ctx (Gfx.color 0 0 0 255);
+  Gfx.set_color ctx (Gfx.color 0 150 0 255);
   Gfx.fill_rect ctx surface 0 0 ww wh;
 
   Gfx.commit ctx

@@ -11,6 +11,7 @@ let wall (x, y, txt, width, height, horiz) =
                HWall e else VWall((if x < 100 then 1 else 2), e));
   e#box#set Rect.{width; height};
   Draw_system.(register (e :> t));
+  Collision_system.(register (e :> t));
   e
 
 let walls () = 

@@ -13,18 +13,26 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 let window_width = 800
 let window_height = 600
 
-let paddle_width = 24
-let paddle_height = 128
+let j_width = 24
+let j_height = 24
 
-let paddle1_x = 64 + paddle_width / 2
-let paddle1_y = window_height / 2 - paddle_height / 2
+let j1_x = 20
+let j1_y = 20
 
-let paddle2_x = window_width - paddle1_x - paddle_width
-let paddle2_y = paddle1_y
-let paddle_color = Texture.blue
+let j2_x = 20
+let j2_y = 60
+let j1_color = Texture.blue
+let j2_color = Texture.red
 
-let paddle_v_up = Vector.{ x = 0.0; y = -5.0 }
-let paddle_v_down = Vector.sub Vector.zero paddle_v_up
+let j1_v_up = Vector.{ x = 0.0; y = -3.0 }
+let j1_v_down = Vector.sub Vector.zero j1_v_up
+let j1_v_left = Vector.{ x = -3.0; y = 0.0 }
+let j1_v_right = Vector.sub Vector.zero j1_v_left
+
+let j2_v_up = Vector.{ x = 0.0; y = -3.0 }
+let j2_v_down = Vector.sub Vector.zero j2_v_up
+let j2_v_left = Vector.{ x = -3.0; y = 0.0 }
+let j2_v_right = Vector.sub Vector.zero j2_v_left
 
 let ball_size = 24
 let ball_color = Texture.red
@@ -33,7 +41,7 @@ let ball_v_offset = window_height / 2 - ball_size / 2
 let ball_left_x = 128 + ball_size / 2
 let ball_right_x = window_width - ball_left_x - ball_size
 
-let wall_thickness = 32
+let wall_thickness = 2
 
 let hwall_width = window_width
 let hwall_height = wall_thickness
@@ -50,6 +58,12 @@ let vwall1_y = wall_thickness
 let vwall2_x = window_width - wall_thickness
 let vwall2_y = vwall1_y
 let vwall_color = Texture.yellow
+
+let exit_x = 400
+let exit_y = 400
+let exit_color = Texture.purple
+let exit_width = 35
+let exit_height = 35
 
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"
 let font_color = Gfx.color 0 0 0 255

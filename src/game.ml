@@ -9,8 +9,10 @@ let update dt =
   let _ =
     match Global.get_game_state () with
     | Game -> begin
+        Move_system.update dt;
+        Collision_system.update dt;
         Draw_system.update dt;
-        Collision_system.update dt
+        Gfx.debug "\n\n"
       end
     | Menu -> Menu_system.update dt
   in
@@ -26,8 +28,7 @@ let run () =
   let ctx = Gfx.get_context window in
   let _walls = Wall.walls () in
   let player1, player2 = Player.players () in
-  let global = Global.{ window; ctx; player1; player2; waiting = 1; state = Menu } in
-  Input.register "e" (fun () -> Global.set_game_state Game_state.Menu);
-  Input.register "a" (fun () -> Global.set_game_state Game_state.Game);
+  let _exitDoor = ExitDoor.create_exit_door () in
+  let global = Global.{ window; ctx; player1; player2; waiting = 1; state = Game } in
   Global.set global;
-  Gfx.main_loop update (fun () -> ())
+  Gfx.main_loop ~limit:true update (fun () -> ())
