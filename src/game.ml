@@ -3,7 +3,6 @@ open Component_defs
 open Ecs
 
 let update dt =
-  let () = Player.stop_players () in
   let () = Input.handle_input () in
  
   let _ =
@@ -24,10 +23,7 @@ let run () =
   in
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
-  let _walls = Wall.walls () in
-  let player1, player2 = Player.players () in
-  let global = Global.{ window; ctx; player1; player2; waiting = 1; state = Menu } in
-  Input.register "e" (fun () -> Global.set_game_state Game_state.Menu);
-  Input.register "a" (fun () -> Global.set_game_state Game_state.Game);
+  let map = Map.map () in
+  let global = Global.{ window; ctx; map; waiting = 1; state = Game } in
   Global.set global;
   Gfx.main_loop update (fun () -> ())

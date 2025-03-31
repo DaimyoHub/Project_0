@@ -18,11 +18,8 @@ let handle_input () =
       if has_key key then action ()) action_table
 
 let () =
-  register "e" (fun () -> Player.(move_player (player1()) Cst.paddle_v_up));
-  register "d" (fun () -> Player.(move_player (player1()) Cst.paddle_v_down));
-  register "u" (fun () -> Player.(move_player (player2()) Cst.paddle_v_up));
-  register "j" (fun () -> Player.(move_player (player2()) Cst.paddle_v_down));
-  register "g" Ball.restart;
+  register "e" (fun () -> Global.set_game_state Game_state.Menu; Gfx.debug "e\n");
+  register "a" (fun () -> Global.set_game_state Game_state.Game; Gfx.debug "a\n");
   register "s" (fun () ->
       let global = Global.get () in
       global.waiting <- 1;
