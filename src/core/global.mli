@@ -5,8 +5,7 @@ type t = {
   window : Gfx.window;
   ctx : Gfx.context;
 
-  player1 : player;
-  player2 : player;
+  map : Map_builder.map;
 
   mutable waiting : int;
   mutable state : Game_state.t

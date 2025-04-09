@@ -1,7 +1,6 @@
 open Ecs
 open Component_defs
 
-
 type t = drawable
 
 let init _ = ()

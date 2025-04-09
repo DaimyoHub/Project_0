@@ -90,6 +90,20 @@ class player name =
     inherit z_position ()
   end
 
+class map_pixel =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit resolver ()
+
+    val mutable level = Map_pixel.Top
+    method get_level = level
+    method set_level v = level <- v
+  end
+
 class ball () =
   object
     inherit Entity.t ()
