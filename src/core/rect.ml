@@ -59,7 +59,7 @@ let penetration_vector s_pos s_rect =
 let rebound v1 r1 v2 r2 = 
   let s_pos, s_rect = mdiff v1 r1 v2 r2 in
   if has_origin s_pos s_rect then
-    let n = penetration_vector s_pos s_rect in
-    Some (if is_zero n.x then Vector.{ x = 1.0; y = -1.0 } else
-            Vector.{x = -1.0; y = 1.0 })
+    (
+      Some Vector.{x=0.0; y=0.0}
+    )
   else None

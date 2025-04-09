@@ -5,6 +5,18 @@ class position () =
     method position = r
   end
 
+class z_position () =
+  let r = Component.init (None : float option) in
+  object
+    method z_position = r
+  end
+
+class velocity () =
+  let r = Component.init Vector.{x=5.; y=5.} in 
+  object 
+    method velocity = r 
+  end
+
 class box () =
   let r = Component.init Rect.{width = 0; height = 0} in
   object
@@ -54,6 +66,14 @@ class type drawable =
     inherit texture
   end
 
+class type movable =
+object
+  inherit Entity.t
+  inherit position 
+  inherit velocity
+  inherit z_position
+end
+
 (** Entités :
     Ici, dans inherit, on appelle les constructeurs pour qu'ils initialisent
     leur partie de l'objet, d'où la présence de l'argument ()
@@ -62,10 +82,12 @@ class player name =
   object
     inherit Entity.t ~name ()
     inherit position ()
+    inherit velocity ()
     inherit box ()
     inherit tagged ()
     inherit texture ()
     inherit resolver ()
+    inherit z_position ()
   end
 
 class map_pixel =
@@ -99,4 +121,15 @@ class wall () =
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit resolver ()
+  end
+
+class exitDoor () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit resolver ()
   end
