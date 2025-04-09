@@ -100,6 +100,15 @@ let iteri_if map pred f =
 
 let iteri map = iteri_if map (fun _ _ _ -> true)
 
+let is_pixel_of_kind map i j kind =
+  assert (is_position_in_bounds map i j);
+
+  let rec fold = function
+    | Up x -> fold x
+    | x -> x
+  in
+  (fold map.data.(i).(j)#get_level) = kind
+
 (*
  * Exemple d'utilisation :
  * 

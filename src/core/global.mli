@@ -7,6 +7,11 @@ type t = {
 
   map : Map_builder.map;
 
+  player1 : player;
+  player2 : player;
+
+  surface_handler : (Surface_kind.t, Gfx.surface) Hashtbl.t;
+
   mutable waiting : int;
   mutable state : Game_state.t
 }

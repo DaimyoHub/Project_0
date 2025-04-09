@@ -72,9 +72,25 @@ let player (name, x, y, txt, width, height) =
   Move_system.(register (e :> t));
   e
 
-let players () =  
-  player  Cst.("player1", j1_x, j1_y, j1_color, j_width, j_height),
-  player  Cst.("player2", j2_x, j2_y, j2_color, j_width, j_height)
+let players map =
+  let extract_player_spawn_pos (map : Map_builder.map) a_or_b =
+    let res = ref Vector.zero in
+
+    for i = 0 to map.size.x - 1 do
+      for j = 0 to map.size.y - 1 do
+        if Map_builder.is_pixel_of_kind map i j a_or_b then
+          res := map.data.(i).(j)#position#get;
+      done;
+    done;
+
+    !res
+  in
+          
+  let p1 = extract_player_spawn_pos map Map_pixel.StartA
+  and p2 = extract_player_spawn_pos map Map_pixel.StartB
+  in
+  player Cst.("player1", int_of_float p1.x, int_of_float p1.y, j1_color, j_width, j_height),
+  player Cst.("player2", int_of_float p2.x, int_of_float p2.y, j2_color, j_width, j_height)
 
 let player1 () = 
   let Global.{player1; _ } = Global.get () in

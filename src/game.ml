@@ -18,18 +18,34 @@ let update dt =
 
   None
 
+let load_images dt =
+  let glb = Global.get () in
+  Hashtbl.add glb.surface_handler
+    (* key *) Surface_kind.Ground
+    (* value *)(Gfx.get_resource
+      (Gfx.load_image (Gfx.get_context glb.window) "/home/daimyo/dev/project_0/resources/images/ball.png"));
+
+  None
+
+  
 let run () =
   let window_spec = 
     Format.sprintf "game_canvas:%dx%d:"
       Cst.window_width Cst.window_height
   in
-  let window = Gfx.create  window_spec
-  and ctx = Gfx.get_context window
+  let map = Map.map () in
+  let window = Gfx.create  window_spec in
+  let ctx = Gfx.get_context window
   and _walls = Wall.walls ()
-  and player1, player2 = Player.players ()
-  and _exitDoor = ExitDoor.create_exit_door ()
-  and map = Map.map () in
-  let global = Global.{ window; ctx; map; player1; player2; waiting = 1; state = Game } in
+  and player1, player2 = Player.players map
+  and _exitDoor = ExitDoor.create_exit_door () in
+  let global = Global.{ window; ctx; map; player1; player2; waiting = 1; state = Game; surface_handler = Hashtbl.create 10 } in
+
 
   Global.set global;
+
+  (* Il faudrait que le chargement des ressources se fasse proprement. Là c'est moche *)
+  let _ = load_images () in
+  Gfx.debug "ok%!";
+
   Gfx.main_loop ~limit:true update (fun () -> ())
