@@ -1,2 +1,1 @@
-type t =
-  | Ground
+type t = Ground

@@ -14,7 +14,7 @@ let wall (x, y, txt, width, height, horiz) =
   Collision_system.(register (e :> t));
   e
 
-let walls () = 
+let create () = 
   List.map wall
     Cst.[ 
       (hwall1_x, hwall1_y, hwall_color, hwall_width, hwall_height, true);

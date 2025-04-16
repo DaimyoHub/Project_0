@@ -46,7 +46,7 @@ let run () =
             let th = Hashtbl.create 10 in
             List.iter (fun im -> Hashtbl.add th Texture_kind.Ground im) images;
 
-            let _walls = Wall.walls ()
+            let _walls = Wall.create ()
             and map = Map.map () in
             let player1, player2 = Player.create_both map
             and _exitDoor = Exit_door.create () in

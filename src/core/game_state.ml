@@ -1,3 +1,1 @@
-type t = 
-  | Game
-  | Menu
+type t = Game | Menu
