@@ -17,16 +17,6 @@ let update dt =
   in
 
   None
-
-let load_images dt =
-  let glb = Global.get () in
-  Hashtbl.add glb.surface_handler
-    (* key *) Surface_kind.Ground
-    (* value *)(Gfx.get_resource
-      (Gfx.load_image (Gfx.get_context glb.window) "resources/images/ball.png"));
-
-  None
-
   
 let run () =
   let window_spec = 
@@ -39,10 +29,35 @@ let run () =
   and _walls = Wall.walls ()
   and player1, player2 = Player.players map
   and _exitDoor = ExitDoor.create_exit_door () in
-  let global = Global.{ window; ctx; map; player1; player2; waiting = 1; state = Game; surface_handler = Hashtbl.create 10 } in
 
-  Global.set global;
+  let cfg = Global.{
+    window;
+    ctx;
+    map;
+    player1; player2;
+    waiting = 1;
+    state = Game;
+    surface_handler = Hashtbl.create 10;
+  }
+  in Global.set cfg;
 
-  (*let _ = load_images 0 in*)
-
-  Gfx.main_loop ~limit:true update (fun () -> ())
+  let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in
+  Gfx.main_loop
+    (fun _dt -> Gfx.get_resource_opt tile_set_r)
+    (fun txt -> 
+       let images_r =
+         txt
+         |> String.split_on_char '\n'
+         |> List.filter (fun s -> s <> "")
+         |> List.map (fun s -> Gfx.load_image ctx ("resources/images/" ^ s))
+       in
+       Gfx.main_loop (fun _dt ->
+           if List.for_all Gfx.resource_ready images_r then
+             Some (List.map Gfx.get_resource images_r)
+           else None
+         )
+         (fun images ->
+            let glb = Global.get () in
+            List.iter (fun im -> Hashtbl.add glb.surface_handler Surface_kind.Ground im) images;
+            Gfx.main_loop update (fun () -> ())
+         ))

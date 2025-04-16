@@ -24,9 +24,19 @@ let map () =
       width = Map_pixel.default_size.x;
       height = Map_pixel.default_size.y };
 
-    (* x#texture#set (Texture.Image (Hashtbl.find surface_handler Surface_kind.Ground)); *)
+    (*let sh = (Global.get ()).surface_handler in
+    let _ground_texture = 
+      match Hashtbl.find_opt sh Surface_kind.Ground with
+      | Some t -> Texture.Image t
+      | None -> Texture.green
+    in
+    x#texture#set Texture.green;*)
 
-    x#texture#set Texture.yellow;
+    x#texture#set 
+      (match x#get_level with
+      | Map_pixel.StartA | Map_pixel.StartB -> Texture.green
+      | Map_pixel.Up _ -> Texture.red
+      | Map_pixel.Top -> Texture.green);
 
     x#tag#set Mappix;
 
