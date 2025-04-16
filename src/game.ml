@@ -23,7 +23,7 @@ let load_images dt =
   Hashtbl.add glb.surface_handler
     (* key *) Surface_kind.Ground
     (* value *)(Gfx.get_resource
-      (Gfx.load_image (Gfx.get_context glb.window) "resources/images/map_pixel_ground.png"));
+      (Gfx.load_image (Gfx.get_context glb.window) "resources/images/ball.png"));
 
   None
 
@@ -43,6 +43,6 @@ let run () =
 
   Global.set global;
 
-  let _ = load_images 0 in
+  (*let _ = load_images 0 in*)
 
   Gfx.main_loop ~limit:true update (fun () -> ())

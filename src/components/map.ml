@@ -5,15 +5,15 @@ open System_defs
 type tag += Mappix
 
 let map () =
-  let open Map_builder in
-  let m = make_flat_map Map_builder.{ x = 31; y = 23 }
+  let open Map_handler in
+  let m = make_flat_map { x = 31; y = 23 }
     |> up_on_range 1 5 3 5 3
     |> up_on_range 1 13 2 9 2
     |> set_level_as 0 0 Map_pixel.StartA
     |> set_level_as 30 22 Map_pixel.StartB
   in
 
-  let surface_handler = (Global.get ()).surface_handler in
+  (* let surface_handler = (Global.get ()).surface_handler in *)
 
   iteri m (fun i j x ->
     x#position#set Vector.{
@@ -26,7 +26,7 @@ let map () =
 
     (* x#texture#set (Texture.Image (Hashtbl.find surface_handler Surface_kind.Ground)); *)
 
-    x#texture#set Texture.black;
+    x#texture#set Texture.yellow;
 
     x#tag#set Mappix;
 

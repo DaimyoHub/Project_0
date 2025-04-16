@@ -73,12 +73,12 @@ let player (name, x, y, txt, width, height) =
   e
 
 let players map =
-  let extract_player_spawn_pos (map : Map_builder.map) a_or_b =
+  let extract_player_spawn_pos (map : Map_handler.map) a_or_b =
     let res = ref Vector.zero in
 
     for i = 0 to map.size.x - 1 do
       for j = 0 to map.size.y - 1 do
-        if Map_builder.is_pixel_of_kind map i j a_or_b then
+        if Map_handler.is_pixel_of_kind map i j a_or_b then
           res := map.data.(i).(j)#position#get;
       done;
     done;
