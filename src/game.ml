@@ -23,23 +23,8 @@ let run () =
     Format.sprintf "game_canvas:%dx%d:"
       Cst.window_width Cst.window_height
   in
-  let map = Map.map () in
   let window = Gfx.create  window_spec in
-  let ctx = Gfx.get_context window
-  and _walls = Wall.walls ()
-  and player1, player2 = Player.players map
-  and _exitDoor = ExitDoor.create_exit_door () in
-
-  let cfg = Global.{
-    window;
-    ctx;
-    map;
-    player1; player2;
-    waiting = 1;
-    state = Game;
-    surface_handler = Hashtbl.create 10;
-  }
-  in Global.set cfg;
+  let ctx = Gfx.get_context window in
 
   let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in
   Gfx.main_loop
@@ -53,11 +38,33 @@ let run () =
        in
        Gfx.main_loop (fun _dt ->
            if List.for_all Gfx.resource_ready images_r then
-             Some (List.map Gfx.get_resource images_r)
+             Some (
+               List.map (fun surface -> Texture.Image surface)
+                (List.map Gfx.get_resource images_r))
            else None
          )
          (fun images ->
+            let th = Hashtbl.create 10 in
+            List.iter (fun im -> Hashtbl.add th Texture_kind.Ground im) images;
+
+            let _walls = Wall.walls ()
+            and map = Map.map () in
+            let player1, player2 = Player.players map
+            and _exitDoor = ExitDoor.create_exit_door () in
+
+            let cfg = Global.{
+              window;
+              ctx;
+              map;
+              player1; player2;
+              waiting = 1;
+              state = Game;
+              texture_handler = th;
+            }
+            in Global.set cfg;
+
             let glb = Global.get () in
-            List.iter (fun im -> Hashtbl.add glb.surface_handler Surface_kind.Ground im) images;
+            Map.set_texture glb.map;
+
             Gfx.main_loop update (fun () -> ())
          ))

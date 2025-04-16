@@ -9,7 +9,7 @@ type t = {
   player1 : player;
   player2 : player;
 
-  surface_handler : (Surface_kind.t, Gfx.surface) Hashtbl.t;
+  texture_handler : (Texture_kind.t, Texture.t) Hashtbl.t;
 
   mutable waiting : int;
   mutable state : Game_state.t

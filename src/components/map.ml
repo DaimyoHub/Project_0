@@ -13,8 +13,6 @@ let map () =
     |> set_level_as 30 22 Map_pixel.StartB
   in
 
-  (* let surface_handler = (Global.get ()).surface_handler in *)
-
   iteri m (fun i j x ->
     x#position#set Vector.{
       x = float_of_int ((i + 1) * Map_pixel.default_size.x);
@@ -24,20 +22,18 @@ let map () =
       width = Map_pixel.default_size.x;
       height = Map_pixel.default_size.y };
 
-    (*let sh = (Global.get ()).surface_handler in
-    let _ground_texture = 
-      match Hashtbl.find_opt sh Surface_kind.Ground with
-      | Some t -> Texture.Image t
-      | None -> Texture.green
-    in
-    x#texture#set Texture.green;*)
-
-    x#texture#set 
-      (match x#get_level with
-      | Map_pixel.StartA | Map_pixel.StartB -> Texture.green
-      | Map_pixel.Up _ -> Texture.red
-      | Map_pixel.Top -> Texture.green);
-
     x#tag#set Mappix;
 
     Draw_system.(register (x :> t)))
+
+let set_texture map =
+  let _ =
+    Map_handler.iteri map (fun i j x ->
+      let th = (Global.get ()).texture_handler in
+      let _ground_texture = 
+        match Hashtbl.find_opt th Texture_kind.Ground with
+        | Some t -> t
+        | None -> Texture.green
+      in
+      x#texture#set _ground_texture)
+  in ()
