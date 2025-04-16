@@ -109,6 +109,11 @@ let is_pixel_of_kind map i j kind =
   in
   (fold map.data.(i).(j)#get_level) = kind
 
+let get_pixel map i j =
+  assert (is_position_in_bounds map i j);
+
+  map.data.(i).(j)
+
 (*
  * Exemple d'utilisation :
  * 

@@ -4,7 +4,7 @@ open System_defs
 
 type tag += Player of player
 
-let player (name, x, y, txt, width, height) =
+let create (name, x, y, txt, width, height) =
   let e = new player name in
   e#texture#set txt;
   e#tag#set (Player e) ;
@@ -25,7 +25,7 @@ let player (name, x, y, txt, width, height) =
         else
           e#position#set (Vector.sub e#position#get Cst.j1_v_left));
           e#velocity#set Vector.zero)
-    | ExitDoor.ExitDoor -> (
+    | Exit_door.ExitDoor -> (
           Global.set_game_state Menu
     )
     | Player p -> 
@@ -72,7 +72,7 @@ let player (name, x, y, txt, width, height) =
   Move_system.(register (e :> t));
   e
 
-let players map =
+let create_both map =
   let extract_player_spawn_pos (map : Map_handler.map) a_or_b =
     let res = ref Vector.zero in
 
@@ -89,8 +89,8 @@ let players map =
   let p1 = extract_player_spawn_pos map Map_pixel.StartA
   and p2 = extract_player_spawn_pos map Map_pixel.StartB
   in
-  player Cst.("player1", int_of_float p1.x, int_of_float p1.y, j1_color, j_width, j_height),
-  player Cst.("player2", int_of_float p2.x, int_of_float p2.y, j2_color, j_width, j_height)
+  create Cst.("player1", int_of_float p1.x, int_of_float p1.y, j1_color, j_width, j_height),
+  create Cst.("player2", int_of_float p2.x, int_of_float p2.y, j2_color, j_width, j_height)
 
 let player1 () = 
   let Global.{player1; _ } = Global.get () in
@@ -105,8 +105,20 @@ let stop_players () =
   player1#velocity#set Vector.zero;
   player2#velocity#set Vector.zero
 
-let move_player player v =
+let get_map_pixel_under player =
+  let Vector.{ x; y } = player#position#get in
+  
+  let i = int_of_float (
+    Float.round (x /. (float_of_int Map_pixel.default_size.x) +. 0.5))
+  and j = int_of_float (
+    Float.round (y /. (float_of_int Map_pixel.default_size.y) +. 0.5))
+  in
+
+  let glb = Global.get () in
+  Map_handler.get_pixel glb.map i j
+
+let move player v =
   player#velocity#set v
   
-let jump_player player timeMilli =
+let jump player timeMilli =
   player#z_position#set (Some timeMilli)

@@ -19,16 +19,15 @@ let update dt =
   None
   
 let run () =
-  let window_spec = 
-    Format.sprintf "game_canvas:%dx%d:"
-      Cst.window_width Cst.window_height
+  let window_spec =
+    Format.sprintf "game_canvas:%dx%d:" Cst.window_width Cst.window_height
   in
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
 
   let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in
   Gfx.main_loop
-    (fun _dt -> Gfx.get_resource_opt tile_set_r)
+    (fun _ -> Gfx.get_resource_opt tile_set_r)
     (fun txt -> 
        let images_r =
          txt
@@ -36,7 +35,7 @@ let run () =
          |> List.filter (fun s -> s <> "")
          |> List.map (fun s -> Gfx.load_image ctx ("resources/images/" ^ s))
        in
-       Gfx.main_loop (fun _dt ->
+       Gfx.main_loop (fun _ ->
            if List.for_all Gfx.resource_ready images_r then
              Some (
                List.map (fun surface -> Texture.Image surface)
@@ -49,8 +48,8 @@ let run () =
 
             let _walls = Wall.walls ()
             and map = Map.map () in
-            let player1, player2 = Player.players map
-            and _exitDoor = ExitDoor.create_exit_door () in
+            let player1, player2 = Player.create_both map
+            and _exitDoor = Exit_door.create () in
 
             let cfg = Global.{
               window;

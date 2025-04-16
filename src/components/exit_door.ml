@@ -3,7 +3,7 @@ open System_defs
 
 type tag += ExitDoor
 
-let exitDoor (x, y, txt, width, height) =
+let exit_door (x, y, txt, width, height) =
   let e = new wall () in
   e#texture#set txt;
   e#position#set Vector.{x = float x; y = float y};
@@ -13,5 +13,5 @@ let exitDoor (x, y, txt, width, height) =
   Collision_system.(register (e :> t));
   e
 
-let create_exit_door () =
-  exitDoor  Cst.(exit_x, exit_y, exit_color, exit_width, exit_height)
+let create () =
+  exit_door Cst.(exit_x, exit_y, exit_color, exit_width, exit_height)
