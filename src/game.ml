@@ -23,7 +23,7 @@ let load_images dt =
   Hashtbl.add glb.surface_handler
     (* key *) Surface_kind.Ground
     (* value *)(Gfx.get_resource
-      (Gfx.load_image (Gfx.get_context glb.window) "/home/daimyo/dev/project_0/resources/images/ball.png"));
+      (Gfx.load_image (Gfx.get_context glb.window) "resources/images/map_pixel_ground.png"));
 
   None
 
@@ -41,11 +41,8 @@ let run () =
   and _exitDoor = ExitDoor.create_exit_door () in
   let global = Global.{ window; ctx; map; player1; player2; waiting = 1; state = Game; surface_handler = Hashtbl.create 10 } in
 
-
   Global.set global;
 
-  (* Il faudrait que le chargement des ressources se fasse proprement. Là c'est moche *)
-  let _ = load_images () in
-  Gfx.debug "ok%!";
+  let _ = load_images 0 in
 
   Gfx.main_loop ~limit:true update (fun () -> ())

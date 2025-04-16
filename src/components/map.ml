@@ -13,6 +13,8 @@ let map () =
     |> set_level_as 30 22 Map_pixel.StartB
   in
 
+  let surface_handler = (Global.get ()).surface_handler in
+
   iteri m (fun i j x ->
     x#position#set Vector.{
       x = float_of_int ((i + 1) * Map_pixel.default_size.x);
@@ -22,13 +24,9 @@ let map () =
       width = Map_pixel.default_size.x;
       height = Map_pixel.default_size.y };
 
-    let texture =
-      match x#get_level with
-      | StartA | StartB -> Texture.green
-      | Up _ -> Texture.blue
-      | _ -> Texture.red
-    in
-    x#texture#set texture;
+    (* x#texture#set (Texture.Image (Hashtbl.find surface_handler Surface_kind.Ground)); *)
+
+    x#texture#set Texture.black;
 
     x#tag#set Mappix;
 
