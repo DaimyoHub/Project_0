@@ -64,6 +64,8 @@ class type drawable =
     inherit position
     inherit box
     inherit texture
+    inherit z_position
+    inherit tagged
   end
 
 class type movable =
@@ -98,6 +100,7 @@ class map_pixel =
     inherit tagged ()
     inherit texture ()
     inherit resolver ()
+    inherit z_position ()
 
     val mutable level = Map_pixel.Top
     method get_level = level
@@ -122,6 +125,7 @@ class wall () =
     inherit tagged ()
     inherit texture ()
     inherit resolver ()
+    inherit z_position ()
   end
 
 class exitDoor () =

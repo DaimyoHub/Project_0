@@ -1,8 +1,7 @@
 open Ecs
 open Component_defs
 open System_defs
-
-type tag += Mappix
+open Map_pixel
 
 let map () =
   let open Map_handler in
@@ -17,12 +16,15 @@ let map () =
     x#position#set Vector.{
       x = float_of_int ((i + 1) * Map_pixel.default_size.x);
       y = float_of_int ((j + 1) * Map_pixel.default_size.y) };
+
+    x#z_position#set (Some
+      (float_of_int (Map_handler.int_of_level x#get_level)));
   
     x#box#set Rect.{
       width = Map_pixel.default_size.x;
       height = Map_pixel.default_size.y };
 
-    x#tag#set Mappix;
+    x#tag#set Map_pixel_tag.Mappix;
 
     Draw_system.(register (x :> t)))
 

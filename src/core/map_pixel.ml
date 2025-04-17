@@ -12,3 +12,4 @@ type size = {
 let default_size = { x = 24; y = 24 }
 
 let texture = Texture.red
+
