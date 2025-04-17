@@ -32,10 +32,18 @@ let set_texture map =
   let _ =
     Map_handler.iteri map (fun i j x ->
       let th = (Global.get ()).texture_handler in
-      let _ground_texture = 
-        match Hashtbl.find_opt th Texture_kind.Ground with
+      let texture = 
+        let open Texture_kind in
+        let lvl = Map_handler.int_of_level x#get_level in
+        let texture_kind =
+          if      lvl = 0 then Ground
+          else if lvl = 1 then Wall_1
+          else if lvl = 2 then Wall_2
+          else (* lvl = 3 *)   Wall_3
+        in
+        match Hashtbl.find_opt th texture_kind with
         | Some t -> t
         | None -> Texture.green
       in
-      x#texture#set _ground_texture)
+      x#texture#set texture)
   in ()

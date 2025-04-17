@@ -29,41 +29,60 @@ let run () =
   Gfx.main_loop
     (fun _ -> Gfx.get_resource_opt tile_set_r)
     (fun txt -> 
-       let images_r =
-         txt
-         |> String.split_on_char '\n'
-         |> List.filter (fun s -> s <> "")
-         |> List.map (fun s -> Gfx.load_image ctx ("resources/images/" ^ s))
-       in
-       Gfx.main_loop (fun _ ->
-           if List.for_all Gfx.resource_ready images_r then
-             Some (
-               List.map (fun surface -> Texture.Image surface)
-                (List.map Gfx.get_resource images_r))
-           else None
-         )
-         (fun images ->
-            let th = Hashtbl.create 10 in
-            List.iter (fun im -> Hashtbl.add th Texture_kind.Ground im) images;
+      Gfx.debug "%s" txt;
+      let images_and_pure_names = txt 
+        |> String.split_on_char '\n'
+        |> List.filter (fun s -> s <> "")
+        |> List.map (fun s ->
+            let pure_name =
+              match String.split_on_char '.' s with
+              | s :: _ -> s
+              | [] -> ""
+            in
+            Gfx.load_image ctx ("resources/images/" ^ s), pure_name)
+      in
 
-            let _walls = Wall.create ()
-            and map = Map.map () in
-            let player1, player2 = Player.create_both map
-            and _exitDoor = Exit_door.create () in
+      Gfx.main_loop
+        (fun _ ->
+          if List.for_all
+            (fun (s, _) -> Gfx.resource_ready s) images_and_pure_names then
+              Some (
+                List.map (fun (s, n) -> Texture.Image s, n)
+                  (List.map
+                    (fun (s, n) -> Gfx.get_resource s, n) images_and_pure_names))
+          else None)
+        (fun images ->
+          let th = Hashtbl.create 10 in
 
-            let cfg = Global.{
-              window;
-              ctx;
-              map;
-              player1; player2;
-              waiting = 1;
-              state = Game;
-              texture_handler = th;
-            }
-            in Global.set cfg;
+          List.iter (fun (i, n) ->
+            let texture_kind = 
+              let open Texture_kind in
+              if      n = "map_pixel_ground" then Ground
+              else if n = "map_pixel_wall_1" then Wall_1
+              else if n = "map_pixel_wall_2" then Wall_2
+              else (* n = "map_pixel_wall_3" *)   Wall_3
+            in
+            Hashtbl.add th texture_kind i
+          ) images;
 
-            let glb = Global.get () in
-            Map.set_texture glb.map;
+          let _walls = Wall.create ()
+          and map = Map.map () in
+          let player1, player2 = Player.create_both map
+          and _exitDoor = Exit_door.create () in
 
-            Gfx.main_loop update (fun () -> ())
-         ))
+          let cfg = Global.{
+            window;
+            ctx;
+            map;
+            player1; player2;
+            waiting = 1;
+            state = Game;
+            texture_handler = th;
+          }
+          in Global.set cfg;
+
+          let glb = Global.get () in
+          Map.set_texture glb.map;
+
+          Gfx.main_loop update (fun () -> ())
+        ))

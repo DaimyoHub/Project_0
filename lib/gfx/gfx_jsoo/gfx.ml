@@ -267,8 +267,8 @@ let main_loop ?(limit=true) f k =
     let d = dt -. !last_dt in
     if d >= 16. then
       let () = last_dt := dt in
-      let fps = 1000.0 /. d in
-      debug "FPS: %d \n " (int_of_float fps);
+      (* let fps = 1000.0 /. d in
+      debug "FPS: %d \n " (int_of_float fps); *)
       match f dt with
         None -> ignore (Js.Unsafe.global##requestAnimationFrame loop_limit)
       | Some res -> (k res)
