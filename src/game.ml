@@ -11,7 +11,6 @@ let update dt =
         Move_system.update dt;
         Collision_system.update dt;
         Draw_system.update dt;
-        Gfx.debug "\n\n"
       end
     | Menu -> Menu_system.update dt
   in
@@ -25,11 +24,11 @@ let run () =
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
 
-  let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in
+  (*let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in*)
   Gfx.main_loop
-    (fun _ -> Gfx.get_resource_opt tile_set_r)
+    (fun _ -> (*Gfx.get_resource_opt tile_set_r*)
+      Some "map_pixel_ground.png\nmap_pixel_wall_1.png\nmap_pixel_wall_2.png\nmap_pixel_wall_3.png\n")
     (fun txt -> 
-      Gfx.debug "%s" txt;
       let images_and_pure_names = txt 
         |> String.split_on_char '\n'
         |> List.filter (fun s -> s <> "")
