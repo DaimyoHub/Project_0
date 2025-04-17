@@ -27,7 +27,7 @@ let run () =
   (*let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in*)
   Gfx.main_loop
     (fun _ -> (*Gfx.get_resource_opt tile_set_r*)
-      Some "map_pixel_ground.png\nmap_pixel_wall_1.png\nmap_pixel_wall_2.png\nmap_pixel_wall_3.png\n")
+      Some "map_pixel_ground.png\nmap_pixel_wall_1.png\nmap_pixel_wall_2.png\nmap_pixel_wall_3.png\nplayer_1_right.png\nplayer_2_right.png\nplayer_1_left.png\nplayer_2_left.png")
     (fun txt -> 
       let images_and_pure_names = txt 
         |> String.split_on_char '\n'
@@ -59,6 +59,10 @@ let run () =
               if      n = "map_pixel_ground" then Ground
               else if n = "map_pixel_wall_1" then Wall_1
               else if n = "map_pixel_wall_2" then Wall_2
+              else if n = "player_1_right"   then Player_1_right
+              else if n = "player_2_right"   then Player_2_right
+              else if n = "player_1_left"    then Player_1_left
+              else if n = "player_2_left"    then Player_2_left
               else (* n = "map_pixel_wall_3" *)   Wall_3
             in
             Hashtbl.add th texture_kind i
@@ -82,6 +86,8 @@ let run () =
 
           let glb = Global.get () in
           Map.set_texture glb.map;
+          Player.set_texture player1 Texture_kind.Player_1_right;
+          Player.set_texture player2 Texture_kind.Player_2_right;
 
           Gfx.main_loop update (fun () -> ())
         ))

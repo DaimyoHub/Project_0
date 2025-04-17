@@ -4,9 +4,8 @@ open System_defs
 
 type tag += Player of player
 
-let create (name, x, y, txt, width, height) =
+let create (name, x, y, width, height) =
   let e = new player name in
-  e#texture#set txt;
   e#tag#set (Player e) ;
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
@@ -89,8 +88,8 @@ let create_both map =
   let p1 = extract_player_spawn_pos map Map_pixel.StartA
   and p2 = extract_player_spawn_pos map Map_pixel.StartB
   in
-  create Cst.("player1", int_of_float p1.x, int_of_float p1.y, j1_color, j_width, j_height),
-  create Cst.("player2", int_of_float p2.x, int_of_float p2.y, j2_color, j_width, j_height)
+  create Cst.("player1", int_of_float p1.x, int_of_float p1.y, j_width, j_height),
+  create Cst.("player2", int_of_float p2.x, int_of_float p2.y, j_width, j_height)
 
 let player1 () = 
   let Global.{player1; _ } = Global.get () in
@@ -122,3 +121,12 @@ let move player v =
   
 let jump player timeMilli =
   player#z_position#set (Some timeMilli)
+
+let set_texture player texture =
+  let texture_handler = (Global.get ()).texture_handler in
+  let texture =
+    match Hashtbl.find_opt texture_handler texture with
+    | Some t -> t
+    | None -> Texture.green
+  in
+  player#texture#set texture
