@@ -62,20 +62,16 @@ let update _dt el =
   Gfx.set_color ctx black;
   Gfx.fill_rect ctx surface 0 0 ww wh;
 
-  Seq.iter (fun (e:t) ->
-    if e#tag#get = Map_pixel_tag.Mappix then
-      let pos = e#position#get in
-      let box = e#box#get in
-      let txt = e#texture#get in
-      Texture.draw ctx surface pos box txt
-    ) el;
+  let map_pixels, other_entities =
+    Seq.partition (fun e -> e#tag#get = Map_pixel_tag.Mappix) el
+  in
+  
+  let draw e =
+    let pos = e#position#get and box = e#box#get and txt = e#texture#get in
+    Texture.draw ctx surface pos box txt
+  in
 
-  Seq.iter (fun (e:t) ->
-    if e#tag#get <> Map_pixel_tag.Mappix then
-      let pos = e#position#get in
-      let box = e#box#get in
-      let txt = e#texture#get in
-      Texture.draw ctx surface pos box txt
-    ) el;
+  Seq.iter draw map_pixels;
+  Seq.iter draw other_entities;
 
   Gfx.commit ctx
