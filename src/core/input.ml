@@ -24,13 +24,15 @@ let () =
   register "m" (fun () -> Global.set_game_state Game_state.Menu);
   register "p" (fun () -> Global.set_game_state Game_state.Game);
 
-  register "y" (fun () -> Player.(move (player1()) Cst.j1_v_up));
-  register "h" (fun () -> Player.(move (player1()) Cst.j1_v_down));
-
-  register "g" (fun () ->
+  register "y" (fun () ->
     let p1 = player1 () in
-    set_texture p1 Player_1_left;
-    move p1 Cst.j1_v_left);
+    set_texture p1 Player_1_top;
+    move p1 Cst.j1_v_up);
+
+  register "h" (fun () ->
+    let p1 = player1 () in
+    set_texture p1 Player_1_bottom;
+    move p1 Cst.j1_v_down);
 
   register "j" (fun () ->
     let p1 = player1 () in
@@ -49,6 +51,14 @@ let () =
     set_texture p1 Player_2_right;
     move p1 Cst.j1_v_right);
 
-  register "z" (fun () -> Player.(move (player2()) Cst.j2_v_up));
-  register "s" (fun () -> Player.(move (player2()) Cst.j2_v_down));
+  register "z" (fun () ->
+    let p1 = player2 () in
+    set_texture p1 Player_2_top;
+    move p1 Cst.j1_v_up);
+
+  register "s" (fun () ->
+    let p1 = player2 () in
+    set_texture p1 Player_2_bottom;
+    move p1 Cst.j1_v_down);
+
   register "a" (fun () -> Player.(jump (player2()) (Unix.gettimeofday ())));

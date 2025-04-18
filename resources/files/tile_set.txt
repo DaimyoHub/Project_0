@@ -1,5 +1,15 @@
 map_pixel_wall_1.png
-map_pixel_ground.png
 map_pixel_wall_2.png
 map_pixel_wall_3.png
+map_pixel_ground.png
+
+player_1_left.png
+player_1_right.png
+player_1_bottom.png
+player_1_top.png
+
+player_2_left.png
+player_2_right.png
+player_2_bottom.png
+player_2_top.png
 
