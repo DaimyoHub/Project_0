@@ -16,6 +16,13 @@ let update dt =
   in
 
   None
+
+let set_textures () =
+  Map.set_texture (Global.get ()).map;
+
+  let open Player in
+  set_texture (player1 ()) Texture_kind.Player_1_top;
+  set_texture (player2 ()) Texture_kind.Player_2_top
   
 let run () =
   let window_spec =
@@ -27,9 +34,8 @@ let run () =
   let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in
   Gfx.main_loop
     (fun _ -> Gfx.get_resource_opt tile_set_r)
-      (*Some "map_pixel_ground.png\nmap_pixel_wall_1.png\nmap_pixel_wall_2.png\nmap_pixel_wall_3.png\nplayer_1_right.png\nplayer_2_right.png\nplayer_1_left.png\nplayer_2_left.png\nplayer_1_top.png\nplayer_2_top.png\nplayer_1_bottom.png\nplayer_2_bottom.png")*)
-    (fun txt -> 
-      let images_and_pure_names = txt 
+    (fun tile_set -> 
+      let images_and_pure_names = tile_set
         |> String.split_on_char '\n'
         |> List.filter (fun s -> s <> "")
         |> List.map (fun s ->
@@ -88,10 +94,7 @@ let run () =
           }
           in Global.set cfg;
 
-          let glb = Global.get () in
-          Map.set_texture glb.map;
-          Player.set_texture player1 Texture_kind.Player_1_top;
-          Player.set_texture player2 Texture_kind.Player_2_top;
+          set_textures ();
 
           Gfx.main_loop update (fun () -> ())
         ))
