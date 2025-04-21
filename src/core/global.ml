@@ -4,7 +4,7 @@ type t = {
   window : Gfx.window;
   ctx : Gfx.context;
 
-  map : Map_handler.map;
+  mutable map : Map_handler.map;
 
   player1 : player;
   player2 : player;

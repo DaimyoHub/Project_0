@@ -5,9 +5,14 @@ let sub a b = { x = a.x -. b.x; y = a.y -. b.y }
 
 let mult k a = { x = k*. a.x; y = k*. a.y }
 
-let dot a b =  failwith "TODO 5.1"
-let norm a = failwith "TODO 5.1"
-let normalize a = failwith "TODO 5.1"
+let norm a = sqrt (a.x *. a.x +. a.y *. a.y)
+
+let dot a = failwith "TODO"
+
+let normalize a =
+  let norm = norm a in
+  { x = a.x /. norm; y = a.y /. norm }
+
 let pp fmt a = Format.fprintf fmt "(%f, %f)" a.x a.y
 
 let zero = { x = 0.0; y = 0.0 }

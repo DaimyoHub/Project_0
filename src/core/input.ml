@@ -41,6 +41,11 @@ let () =
     set_texture p1 Player_1_right;
     move p1 Cst.j1_v_right);
 
+  register "g" (fun () ->
+    let p1 = player1 () in
+    set_texture p1 Player_1_left;
+    move p1 Cst.j1_v_left);
+
   register "t" (fun () -> Player.(jump (player1()) (Unix.gettimeofday ())));
   
   register "q" (fun () ->

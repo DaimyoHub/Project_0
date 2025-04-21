@@ -4,6 +4,8 @@ type t =
   | Wall_2
   | Wall_3
 
+  | Focused_ground
+
   | Player_1_right
   | Player_1_left
   | Player_1_bottom

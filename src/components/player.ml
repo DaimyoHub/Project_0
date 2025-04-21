@@ -110,17 +110,27 @@ let stop_players () =
   player1#velocity#set Vector.zero;
   player2#velocity#set Vector.zero
 
-let get_map_pixel_under player =
+let get_focused_map_pixel player map =
   let Vector.{ x; y } = player#position#get in
-  
-  let i = int_of_float (
-    Float.round (x /. (float_of_int Map_pixel.default_size.x) +. 0.5))
-  and j = int_of_float (
-    Float.round (y /. (float_of_int Map_pixel.default_size.y) +. 0.5))
-  in
 
-  let glb = Global.get () in
-  Map_handler.get_pixel glb.map i j
+  let v = Vector.(mult 2. (normalize player#velocity#get)) in
+  let i =
+    int_of_float (x /. (float_of_int Map_pixel.default_size.x) -. 0.5 +. v.x)
+  and j =
+    int_of_float (y /. (float_of_int Map_pixel.default_size.y) -. 0.5 +. v.y)
+  in
+  if Map_handler.is_position_in_bounds map i j then
+    let pix = Map_handler.get_pixel map i j in
+
+    let player_z_pos = 
+      match player#z_position#get with
+      | None -> 0
+      | Some i -> int_of_float i
+    in
+    let pixel_z_pos = Map_handler.int_of_level pix#get_level in
+
+    if player_z_pos = pixel_z_pos then Some pix else None
+  else None
 
 let move player v =
   player#velocity#set v

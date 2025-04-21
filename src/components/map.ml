@@ -29,22 +29,24 @@ let map () =
     Draw_system.(register (x :> t));
     if int_z_pos > 0 then Collision_system.(register (x :> t)))
 
+let set_map_pixel_texture texture_handler map_pixel =
+  let texture = 
+    let open Texture_kind in
+    let lvl = Map_handler.int_of_level map_pixel#get_level in
+    let texture_kind =
+      if      lvl = 0 then Ground
+      else if lvl = 1 then Wall_1
+      else if lvl = 2 then Wall_2
+      else (* lvl = 3 *)   Wall_3
+    in
+    match Hashtbl.find_opt texture_handler texture_kind with
+    | Some t -> t
+    | None -> Texture.green
+  in
+  map_pixel#texture#set texture
+
 let set_texture map =
   let _ =
-    Map_handler.iteri map (fun i j x ->
-      let th = (Global.get ()).texture_handler in
-      let texture = 
-        let open Texture_kind in
-        let lvl = Map_handler.int_of_level x#get_level in
-        let texture_kind =
-          if      lvl = 0 then Ground
-          else if lvl = 1 then Wall_1
-          else if lvl = 2 then Wall_2
-          else (* lvl = 3 *)   Wall_3
-        in
-        match Hashtbl.find_opt th texture_kind with
-        | Some t -> t
-        | None -> Texture.green
-      in
-      x#texture#set texture)
+    let th = (Global.get ()).texture_handler in
+    Map_handler.iteri map (fun i j x -> set_map_pixel_texture th x)
   in ()

@@ -11,7 +11,7 @@ type map = {
 
 let int_of_level level =
   let rec compute_level acc = function
-    | Top | StartA | StartB -> acc
+    | Top | StartA | StartB | Focused -> acc
     | Up lvl -> compute_level (acc + 1) lvl
   in
   compute_level 0 level

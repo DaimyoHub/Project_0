@@ -2,8 +2,29 @@ open System_defs
 open Component_defs
 open Ecs
 
+let set_focused_map_pixel () =
+  let glb = Global.get () in
+
+  let focused_texture = Option.value
+    (Hashtbl.find_opt glb.texture_handler Texture_kind.Focused_ground)
+    ~default: Texture.green
+  in
+
+  glb.map <-
+    Map_handler.iter_if glb.map
+      (fun pix -> pix#texture#get = focused_texture) 
+      (fun pix -> Map.set_map_pixel_texture glb.texture_handler pix);
+
+  let p1, p2 = Player.(player1 (), player2 ()) in
+
+  match Player.get_focused_map_pixel p1 glb.map with
+  | Some pix -> pix#texture#set focused_texture
+  | None -> ()
+
 let update dt =
   let () = Input.handle_input () in
+
+  set_focused_map_pixel ();
  
   let _ =
     match Global.get_game_state () with
@@ -62,17 +83,18 @@ let run () =
           List.iter (fun (i, n) ->
             let texture_kind = 
               let open Texture_kind in
-              if      n = "map_pixel_ground" then Ground
-              else if n = "map_pixel_wall_1" then Wall_1
-              else if n = "map_pixel_wall_2" then Wall_2
-              else if n = "player_1_right"   then Player_1_right
-              else if n = "player_2_right"   then Player_2_right
-              else if n = "player_1_left"    then Player_1_left
-              else if n = "player_2_left"    then Player_2_left
-              else if n = "player_1_bottom"  then Player_1_bottom
-              else if n = "player_2_bottom"  then Player_2_bottom
-              else if n = "player_1_top"     then Player_1_top
-              else if n = "player_2_top"     then Player_2_top
+              if      n = "map_pixel_ground"         then Ground
+              else if n = "map_pixel_wall_1"         then Wall_1
+              else if n = "map_pixel_wall_2"         then Wall_2
+              else if n = "player_1_right"           then Player_1_right
+              else if n = "player_2_right"           then Player_2_right
+              else if n = "player_1_left"            then Player_1_left
+              else if n = "player_2_left"            then Player_2_left
+              else if n = "player_1_bottom"          then Player_1_bottom
+              else if n = "player_2_bottom"          then Player_2_bottom
+              else if n = "player_1_top"             then Player_1_top
+              else if n = "player_2_top"             then Player_2_top
+              else if n = "focused_map_pixel_ground" then Focused_ground
               else (* n = "map_pixel_wall_3" *)   Wall_3
             in
             Hashtbl.add th texture_kind i

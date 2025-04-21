@@ -1,3 +1,5 @@
+focused_map_pixel_ground.png
+
 map_pixel_wall_1.png
 map_pixel_wall_2.png
 map_pixel_wall_3.png
