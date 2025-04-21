@@ -137,3 +137,15 @@ class exitDoor () =
     inherit texture ()
     inherit resolver ()
   end
+
+class bullet () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit z_position ()
+    inherit tagged ()
+    inherit velocity ()
+    inherit box ()
+    inherit resolver ()
+    inherit texture ()
+  end

@@ -24,9 +24,10 @@ let map () =
       width = Map_pixel.default_size.x;
       height = Map_pixel.default_size.y };
 
-    x#tag#set Map_pixel_tag.Mappix;
+    x#tag#set (Map_pixel_tag.Mappix (x :> z_position));
 
-    Draw_system.(register (x :> t)))
+    Draw_system.(register (x :> t));
+    Collision_system.(register (x :> t)))
 
 let set_texture map =
   let _ =

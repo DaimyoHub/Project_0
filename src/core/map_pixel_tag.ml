@@ -1,3 +1,3 @@
 open Component_defs
 
-type tag += Mappix
+type tag += Mappix of z_position

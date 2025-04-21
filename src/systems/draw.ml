@@ -13,7 +13,8 @@ let update _dt el =
   Gfx.fill_rect ctx surface 0 0 ww wh;
 
   let map_pixels, other_entities =
-    Seq.partition (fun e -> e#tag#get = Map_pixel_tag.Mappix) el
+    Seq.partition (fun e ->
+      match e#tag#get with | Map_pixel_tag.Mappix _ -> true | _ -> false) el
   in
   
   let draw e =

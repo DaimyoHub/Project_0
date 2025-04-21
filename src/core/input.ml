@@ -1,3 +1,5 @@
+open System_defs
+
 let key_table = Hashtbl.create 16
 let has_key s = Hashtbl.mem key_table s
 let set_key s= Hashtbl.replace key_table s ()
@@ -60,5 +62,7 @@ let () =
     let p1 = player2 () in
     set_texture p1 Player_2_bottom;
     move p1 Cst.j1_v_down);
+
+  register "e" (fun () -> Gfx.debug "bullet throwing not implemented%!\n");
 
   register "a" (fun () -> Player.(jump (player2()) (Unix.gettimeofday ())));

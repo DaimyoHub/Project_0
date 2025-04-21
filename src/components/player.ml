@@ -24,6 +24,12 @@ let create (name, x, y, width, height) =
         else
           e#position#set (Vector.sub e#position#get Cst.j1_v_left));
           e#velocity#set Vector.zero)
+    (*
+     * Je sais pas du tout comment gérer la physique, je te laisse cette partie...
+     *)
+    | Map_pixel_tag.Mappix pix -> (
+        let z_pos = Option.value ~default: 1. pix#z_position#get in
+        if z_pos > 0. then e#velocity#set Vector.zero)
     | Exit_door.ExitDoor -> (
           Global.set_game_state Menu
     )

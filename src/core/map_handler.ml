@@ -1,3 +1,4 @@
+open Size
 open Map_pixel
 open Component_defs
 
