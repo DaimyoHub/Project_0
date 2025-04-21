@@ -113,12 +113,12 @@ let stop_players () =
 let get_focused_map_pixel player map =
   let Vector.{ x; y } = player#position#get in
 
-  let v = Vector.(mult 2. (normalize player#velocity#get)) in
-  let i =
-    int_of_float (x /. (float_of_int Map_pixel.default_size.x) -. 0.5 +. v.x)
-  and j =
+  let i, j =
+    let v = Vector.(mult 2. (normalize player#velocity#get)) in
+    int_of_float (x /. (float_of_int Map_pixel.default_size.x) -. 0.5 +. v.x),
     int_of_float (y /. (float_of_int Map_pixel.default_size.y) -. 0.5 +. v.y)
   in
+
   if Map_handler.is_position_in_bounds map i j then
     let pix = Map_handler.get_pixel map i j in
 

@@ -17,9 +17,17 @@ let set_focused_map_pixel () =
 
   let p1, p2 = Player.(player1 (), player2 ()) in
 
-  match Player.get_focused_map_pixel p1 glb.map with
-  | Some pix -> pix#texture#set focused_texture
-  | None -> ()
+  let () = 
+    match Player.get_focused_map_pixel p1 glb.map with
+    | Some pix -> pix#texture#set focused_texture
+    | None -> ()
+  in
+
+  let () =
+    match Player.get_focused_map_pixel p2 glb.map with
+    | Some pix -> pix#texture#set focused_texture
+    | None -> ()
+  in ()
 
 let update dt =
   let () = Input.handle_input () in

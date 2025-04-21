@@ -26,47 +26,53 @@ let () =
   register "m" (fun () -> Global.set_game_state Game_state.Menu);
   register "p" (fun () -> Global.set_game_state Game_state.Game);
 
-  register "y" (fun () ->
-    let p1 = player1 () in
-    set_texture p1 Player_1_top;
-    move p1 Cst.j1_v_up);
+  register "z" (fun () ->
+    let p = player1 () in
+    set_texture p Player_1_top;
+    move p Cst.j1_v_up);
 
-  register "h" (fun () ->
-    let p1 = player1 () in
-    set_texture p1 Player_1_bottom;
-    move p1 Cst.j1_v_down);
+  register "s" (fun () ->
+    let p = player1 () in
+    set_texture p Player_1_bottom;
+    move p Cst.j1_v_down);
 
-  register "j" (fun () ->
-    let p1 = player1 () in
-    set_texture p1 Player_1_right;
-    move p1 Cst.j1_v_right);
+  register "d" (fun () ->
+    let p = player1 () in
+    set_texture p Player_1_right;
+    move p Cst.j1_v_right);
 
-  register "g" (fun () ->
+  register "q" (fun () ->
+    let p = player1 () in
+    set_texture p Player_1_left;
+    move p Cst.j1_v_left);
+
+  register "a" (fun () ->
     let p1 = player1 () in
-    set_texture p1 Player_1_left;
-    move p1 Cst.j1_v_left);
+    match get_focused_map_pixel p1 (Global.get ()).map with
+    | Some pix -> pix#texture#set Texture.green
+    | None -> ());
 
   register "t" (fun () -> Player.(jump (player1()) (Unix.gettimeofday ())));
   
-  register "q" (fun () ->
-    let p1 = player2 () in
-    set_texture p1 Player_2_left;
-    move p1 Cst.j1_v_left);
+  register "j" (fun () ->
+    let p = player2 () in
+    set_texture p Player_2_left;
+    move p Cst.j1_v_left);
 
-  register "d" (fun () ->
-    let p1 = player2 () in
-    set_texture p1 Player_2_right;
-    move p1 Cst.j1_v_right);
+  register "l" (fun () ->
+    let p = player2 () in
+    set_texture p Player_2_right;
+    move p Cst.j1_v_right);
 
-  register "z" (fun () ->
-    let p1 = player2 () in
-    set_texture p1 Player_2_top;
-    move p1 Cst.j1_v_up);
+  register "i" (fun () ->
+    let p = player2 () in
+    set_texture p Player_2_top;
+    move p Cst.j1_v_up);
 
-  register "s" (fun () ->
-    let p1 = player2 () in
-    set_texture p1 Player_2_bottom;
-    move p1 Cst.j1_v_down);
+  register "k" (fun () ->
+    let p = player2 () in
+    set_texture p Player_2_bottom;
+    move p Cst.j1_v_down);
 
   register "e" (fun () -> Gfx.debug "bullet throwing not implemented%!\n");
 

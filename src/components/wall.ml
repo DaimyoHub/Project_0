@@ -10,7 +10,7 @@ let wall (x, y, txt, width, height, horiz) =
   e#tag#set (if horiz then
                HWall e else VWall((if x < 100 then 1 else 2), e));
   e#box#set Rect.{width; height};
-  e#z_position#set (Some 0.);
+  e#z_position#set (Some 1.);
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
   e
