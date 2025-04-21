@@ -17,8 +17,8 @@ let map () =
       x = float_of_int ((i + 1) * Map_pixel.default_size.x);
       y = float_of_int ((j + 1) * Map_pixel.default_size.y) };
 
-    x#z_position#set (Some
-      (float_of_int (Map_handler.int_of_level x#get_level)));
+    let int_z_pos = Map_handler.int_of_level x#get_level in
+    x#z_position#set (Some (float_of_int int_z_pos));
   
     x#box#set Rect.{
       width = Map_pixel.default_size.x;
@@ -27,7 +27,7 @@ let map () =
     x#tag#set (Map_pixel_tag.Mappix (x :> z_position));
 
     Draw_system.(register (x :> t));
-    Collision_system.(register (x :> t)))
+    if int_z_pos > 0 then Collision_system.(register (x :> t)))
 
 let set_texture map =
   let _ =

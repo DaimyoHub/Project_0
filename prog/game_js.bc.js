@@ -3949,10 +3949,11 @@ c=d5(0,10);hd(function(a){var
 b=a[2],h=a[1],f=b==="map_pixel_ground"?0:b==="map_pixel_wall_1"?1:b==="map_pixel_wall_2"?2:b==="player_1_right"?4:b==="player_2_right"?8:b==="player_1_left"?5:b==="player_2_left"?9:b==="player_1_bottom"?6:b==="player_2_bottom"?10:b==="player_1_top"?7:b==="player_2_top"?11:3,d=bW(c,f),g=[0,f,h,i(c[2],d)[1+d]];i(c[2],d)[1+d]=g;c[1]=c[1]+1|0;var
 e=c[2].length-1<<1<c[1]?1:0;return e?hP(bW,c):e},a);cj(uy,[0,[0,uf,ug,ep,f$,cI,1],[0,[0,uh,ui,ep,f$,cI,1],[0,[0,uj,cI,i7,cI,je,0],[0,[0,uk,cI,i7,cI,je,0],0]]]]);var
 d=ji(jh(30,22,2,jh(0,0,1,jg(1,13,2,9,2,jg(2,5,3,5,3,[0,gc,ho(gc[1],function(a){return ho(gc[2],function(a){return h(ud[1],0)})})])))))(function(a,b,c){var
-k=[ae,bR(a+1|0,eq[1]),bR(b+1|0,eq[2])],d=h(g(c,o,378),c);l(g(d,f,379),d,k);var
-m=[0,jf(h(g(c,du,380),c))],e=h(g(c,cK,381),c);l(g(e,f,382),e,m);var
-n=[0,eq[1],eq[2]],i=h(g(c,cd,383),c);l(g(i,f,384),i,n);var
-j=h(g(c,cM,385),c);l(g(j,f,386),j,[0,gb,c]);h(dm[3],c);return h(dl[3],c)});function
+n=[ae,bR(a+1|0,eq[1]),bR(b+1|0,eq[2])],d=h(g(c,o,378),c);l(g(d,f,379),d,n);var
+e=jf(h(g(c,du,380),c)),i=h(g(c,cK,381),c);l(g(i,f,382),i,[0,e]);var
+p=[0,eq[1],eq[2]],j=h(g(c,cd,383),c);l(g(j,f,384),j,p);var
+k=h(g(c,cM,385),c);l(g(k,f,386),k,[0,gb,c]);h(dm[3],c);var
+m=0<e?1:0;return m?h(dl[3],c):m});function
 p(a,b){var
 j=[0,aW],k=a[1][1]-1|0,q=0;if(k>=0){var
 c=q;for(;;){var
