@@ -3,11 +3,12 @@ open System_defs
 open Portal_tag
 
 let set_texture portal =
-  portal#texture#set Texture.green;
-
-  let open Player in
-  set_texture (player1 ()) Texture_kind.Player_1_top;
-  set_texture (player2 ()) Texture_kind.Player_2_top
+  let glb = Global.get () in
+  let portal_texture = Option.value
+    (Hashtbl.find_opt glb.texture_handler Texture_kind.Portal)
+    ~default: Texture.green
+  in
+  portal#texture#set portal_texture
 
 let create_or_move_portal1 (i, j) map_pixel =
   let glb = Global.get () in

@@ -40,15 +40,53 @@ let prepare_texture_handler texture_handler images =
       else if n = "player_1_top"             then Player_1_top
       else if n = "player_2_top"             then Player_2_top
       else if n = "focused_map_pixel_ground" then Focused_ground
-      else (* n = "map_pixel_wall_3" *)   Wall_3
+      else if n = "player_1_right_jump_0"    then Player_1_right_jump_0
+      else if n = "player_1_right_jump_1"    then Player_1_right_jump_1
+      else if n = "player_2_right_jump_0"    then Player_2_right_jump_0
+      else if n = "player_2_right_jump_1"    then Player_2_right_jump_1
+      else if n = "player_1_left_jump_0"     then Player_1_left_jump_0
+      else if n = "player_1_left_jump_1"     then Player_1_left_jump_1
+      else if n = "player_2_left_jump_0"     then Player_2_left_jump_0
+      else if n = "player_2_left_jump_1"     then Player_2_left_jump_1
+      else if n = "player_1_bottom_jump_0"   then Player_1_bottom_jump_0
+      else if n = "player_1_bottom_jump_1"   then Player_1_bottom_jump_1
+      else if n = "player_2_bottom_jump_0"   then Player_2_bottom_jump_0
+      else if n = "player_2_bottom_jump_1"   then Player_2_bottom_jump_1
+      else if n = "player_1_top_jump_0"      then Player_1_top_jump_0
+      else if n = "player_1_top_jump_1"      then Player_1_top_jump_1
+      else if n = "player_2_top_jump_0"      then Player_2_top_jump_0
+      else if n = "player_2_top_jump_1"      then Player_2_top_jump_1
+      else if n = "portal"                   then Portal
+      else (* n = "map_pixel_wall_3" then *)      Wall_3
     in
     Hashtbl.add texture_handler texture_kind i
   ) images
+
+let handle_jump_animation () =
+  let open Player in
+  let inner player =
+    if player#is_jumping then
+      if player#get_jumping_anim_counter < 60 then (
+        (if player#get_jumping_anim_counter = 20 then
+          set_texture player (compute_texture player 1)
+        else if player#get_jumping_anim_counter = 40 then
+          set_texture player (compute_texture player 2));
+
+        player#incr_jumping_anim_counter)
+      else (
+        player#reinit_jumping_anim_counter;
+        set_texture player (compute_texture player 3))
+    else ()
+  in
+
+  inner (player1 ());
+  inner (player2 ())
 
 let update dt =
   let () = Input.handle_input () in
 
   set_focused_map_pixel ();
+  handle_jump_animation ();
  
   let _ =
     match Global.get_game_state () with
@@ -66,8 +104,8 @@ let set_textures () =
   Map.set_texture (Global.get ()).map;
 
   let open Player in
-  set_texture (player1 ()) Texture_kind.Player_1_top;
-  set_texture (player2 ()) Texture_kind.Player_2_top
+  set_texture (player1 ()) Texture_kind.Player_1_right;
+  set_texture (player2 ()) Texture_kind.Player_2_left
   
 let run () =
   let window_spec =

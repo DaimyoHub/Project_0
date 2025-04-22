@@ -90,6 +90,19 @@ class player name =
     inherit texture ()
     inherit resolver ()
     inherit z_position ()
+
+    val mutable jumping_anim_counter = 0
+
+    method is_jumping = jumping_anim_counter <> 0
+
+    method incr_jumping_anim_counter = 
+      Gfx.debug "ok\n%!";
+      jumping_anim_counter <- jumping_anim_counter + 1
+
+    method get_jumping_anim_counter = jumping_anim_counter
+
+    method reinit_jumping_anim_counter =
+      jumping_anim_counter <- 0
   end
 
 class map_pixel =

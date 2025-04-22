@@ -2,11 +2,12 @@ open Ecs
 open Component_defs
 open System_defs
 
-type tag += Player of player
+type idx = One | Two
+type tag += Player of idx * player
 
-let create (name, x, y, width, height) =
+let create (idx, name, x, y, width, height) =
   let e = new player name in
-  e#tag#set (Player e) ;
+  e#tag#set (Player (idx, e)) ;
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
   e#velocity#set Vector.zero;
@@ -33,7 +34,7 @@ let create (name, x, y, width, height) =
     | Exit_door.ExitDoor -> (
           Global.set_game_state Menu
     )
-    | Player p -> 
+    | Player (_, p) -> 
       (
         let eposX = e#position#get.x in
         let eposY = e#position#get.y in
@@ -115,8 +116,8 @@ let create_both map =
   let p1 = extract_player_spawn_pos map Map_pixel.StartA
   and p2 = extract_player_spawn_pos map Map_pixel.StartB
   in
-  create Cst.("player1", int_of_float p1.x, int_of_float p1.y, j_width, j_height),
-  create Cst.("player2", int_of_float p2.x, int_of_float p2.y, j_width, j_height)
+  create Cst.(One, "player1", int_of_float p1.x, int_of_float p1.y, j_width, j_height),
+  create Cst.(Two, "player2", int_of_float p2.x, int_of_float p2.y, j_width, j_height)
 
 let player1 () = 
   let Global.{player1; _ } = Global.get () in
@@ -154,9 +155,45 @@ let get_focused_map_pixel player map =
 
 let move player v =
   player#velocity#set v
-  
-let jump player timeMilli =
-  player#z_position#set (Some timeMilli)
+
+let compute_texture player jp =
+  let open Texture_kind in
+  let is_one = 
+    let compute = function Player (idx, _) -> idx = One | _ -> false
+    in compute player#tag#get
+  in
+  let v = Vector.normalize player#velocity#get in
+
+  if v.x = 0. then
+    if v.y > 0. then
+      if jp = 3 then
+        if is_one then Player_1_bottom else Player_2_bottom
+      else if jp = 2 || jp = 0 then
+        if is_one then Player_1_bottom_jump_0 else Player_2_bottom_jump_0
+      else (* if jp = 1 then *)
+        if is_one then Player_1_bottom_jump_1 else Player_2_bottom_jump_1
+    else
+      if jp = 3 then
+        if is_one then Player_1_top else Player_2_top
+      else if jp = 2 || jp = 0 then
+        if is_one then Player_1_top_jump_0 else Player_2_top_jump_0
+      else (* if jp = 1 then *)
+        if is_one then Player_1_top_jump_1 else Player_2_top_jump_1
+  else
+    if v.x > 0. then
+      if jp = 3 then
+        if is_one then Player_1_right else Player_2_right
+      else if jp = 2 || jp = 0 then
+        if is_one then Player_1_right_jump_0 else Player_2_right_jump_0
+      else (* if jp = 1 then *)
+        if is_one then Player_1_right_jump_1 else Player_2_right_jump_1
+    else
+      if jp = 3 then
+        if is_one then Player_1_left else Player_2_left
+      else if jp = 2 || jp = 0 then
+        if is_one then Player_1_left_jump_0 else Player_2_left_jump_0
+      else (* if jp = 1 then *)
+        if is_one then Player_1_left_jump_1 else Player_2_left_jump_1
 
 let set_texture player texture =
   let texture_handler = (Global.get ()).texture_handler in
@@ -166,3 +203,7 @@ let set_texture player texture =
     | None -> Texture.green
   in
   player#texture#set texture
+  
+let jump player timeMilli =
+  player#z_position#set (Some timeMilli);
+  set_texture player (compute_texture player 0)

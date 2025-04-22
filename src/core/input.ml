@@ -54,7 +54,11 @@ let () =
         Portal.create_or_move_portal1 (i, j) map_pixel
     | None -> ());
 
-  register "t" (fun () -> Player.(jump (player1()) (Unix.gettimeofday ())));
+  register "a" (fun () ->
+    let p1 = Player.player1 () in
+    Player.(jump p1 (Unix.gettimeofday ()));
+    p1#incr_jumping_anim_counter;
+    Player.set_texture p1 (Player.compute_texture p1 0));
   
   register "j" (fun () ->
     let p = player2 () in
@@ -86,4 +90,9 @@ let () =
 
   register "e" (fun () -> Gfx.debug "bullet throwing not implemented%!\n");
 
-  register "a" (fun () -> Player.(jump (player2()) (Unix.gettimeofday ())));
+  register "u" (fun () ->
+    let p2 = Player.player2 () in
+    Player.(jump p2 (Unix.gettimeofday ()));
+    p2#incr_jumping_anim_counter;
+    Player.set_texture p2 (Player.compute_texture p2 0));
+
