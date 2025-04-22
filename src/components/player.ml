@@ -71,6 +71,27 @@ let create (name, x, y, width, height) =
           p#velocity#set Vector.zero
         )
       )
+    | Portal_tag.Portal (idx, (i, j), portal) ->
+        let glb = Global.get () in
+          let open Vector in
+        if idx = Portal_tag.One then (
+          match glb.portal2 with
+          | Some (_, portal2) ->
+              let new_pos = add
+                portal2#position#get
+                (mult 24. (normalize e#velocity#get))
+              in
+              e#position#set new_pos
+          | None -> ())
+        else (
+          match glb.portal1 with
+          | Some (_, portal1) ->
+              let new_pos = add
+                portal1#position#get
+                (mult 24. (normalize e#velocity#get))
+              in
+              e#position#set new_pos;
+          | None -> ())
     | _ -> ());
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
@@ -119,7 +140,7 @@ let get_focused_map_pixel player map =
     int_of_float (y /. (float_of_int Map_pixel.default_size.y) -. 0.5 +. v.y)
   in
 
-  if Map_handler.is_position_in_bounds map i j then
+  if Map_handler.is_position_in_bounds map i j && (i, j) <> (0, 0) then
     let pix = Map_handler.get_pixel map i j in
 
     let player_z_pos =

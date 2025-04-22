@@ -149,3 +149,14 @@ class bullet () =
     inherit resolver ()
     inherit texture ()
   end
+
+class portal () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit z_position ()
+    inherit tagged ()
+    inherit box ()
+    inherit resolver ()
+    inherit texture ()
+  end

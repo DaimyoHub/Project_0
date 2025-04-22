@@ -46,11 +46,13 @@ let () =
     set_texture p Player_1_left;
     move p Cst.j1_v_left);
 
-  register "a" (fun () ->
-    (*
-     * TODO : faire apparaitre le portail
-     *)
-    failwith "todo");
+  register "w" (fun () ->
+    let open Player in
+    let glb = Global.get () in
+    match get_focused_map_pixel (player1 ()) glb.map with
+    | Some ((i, j), map_pixel) -> 
+        Portal.create_or_move_portal1 (i, j) map_pixel
+    | None -> ());
 
   register "t" (fun () -> Player.(jump (player1()) (Unix.gettimeofday ())));
   
@@ -73,6 +75,14 @@ let () =
     let p = player2 () in
     set_texture p Player_2_bottom;
     move p Cst.j1_v_down);
+
+  register "n" (fun () ->
+    let open Player in
+    let glb = Global.get () in
+    match get_focused_map_pixel (player2 ()) glb.map with
+    | Some ((i, j), map_pixel) -> 
+        Portal.create_or_move_portal2 (i, j) map_pixel
+    | None -> ());
 
   register "e" (fun () -> Gfx.debug "bullet throwing not implemented%!\n");
 

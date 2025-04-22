@@ -108,8 +108,7 @@ let run () =
 
           let _walls = Wall.create ()
           and map = Map.map () in
-          let player1, player2 = Player.create_both map
-          and _exitDoor = Exit_door.create () in
+          let player1, player2 = Player.create_both map in
 
           let cfg = Global.{
             window;
@@ -119,6 +118,8 @@ let run () =
             waiting = 1;
             state = Game;
             texture_handler = th;
+            portal1 = None;
+            portal2 = None;
           }
           in Global.set cfg;
 

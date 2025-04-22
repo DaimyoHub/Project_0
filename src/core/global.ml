@@ -11,6 +11,9 @@ type t = {
 
   texture_handler : (Texture_kind.t, Texture.t) Hashtbl.t;
 
+  mutable portal1: ((int * int) * portal) option;
+  mutable portal2: ((int * int) * portal) option;
+
   mutable waiting : int;
   mutable state : Game_state.t
 }
