@@ -36,8 +36,8 @@ let make_flat_map size =
  * Vérifie que la position donnée apparait sur la map.
  *)
 let is_position_in_bounds map x y =
-     0 <= x && x <= map.size.x
-  && 0 <= y && y <= map.size.y
+     0 <= x && x < map.size.x
+  && 0 <= y && y < map.size.y
 
 (*
  * up_on_range map height x x_length y y_length

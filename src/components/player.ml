@@ -122,14 +122,13 @@ let get_focused_map_pixel player map =
   if Map_handler.is_position_in_bounds map i j then
     let pix = Map_handler.get_pixel map i j in
 
-    let player_z_pos = 
-      match player#z_position#get with
-      | None -> 0
-      | Some i -> int_of_float i
+    let player_z_pos =
+      let compute = function None -> 0 | Some i -> int_of_float i in
+      compute player#z_position#get
     in
     let pixel_z_pos = Map_handler.int_of_level pix#get_level in
 
-    if player_z_pos = pixel_z_pos then Some pix else None
+    if player_z_pos = pixel_z_pos then Some ((i, j), pix) else None
   else None
 
 let move player v =

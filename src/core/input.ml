@@ -47,10 +47,10 @@ let () =
     move p Cst.j1_v_left);
 
   register "a" (fun () ->
-    let p1 = player1 () in
-    match get_focused_map_pixel p1 (Global.get ()).map with
-    | Some pix -> pix#texture#set Texture.green
-    | None -> ());
+    (*
+     * TODO : faire apparaitre le portail
+     *)
+    failwith "todo");
 
   register "t" (fun () -> Player.(jump (player1()) (Unix.gettimeofday ())));
   
