@@ -61,3 +61,4 @@ type kind =
   | Portal
 
   | Wind_particle
+  | Bullet

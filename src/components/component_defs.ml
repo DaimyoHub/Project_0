@@ -102,17 +102,26 @@ class player name =
     inherit z_position ()
 
     val mutable jumping_anim_counter = 0
+    val mutable shooting_counter = 0
 
     method is_jumping = jumping_anim_counter <> 0
+    method can_shoot = shooting_counter = 0
 
     method incr_jumping_anim_counter = 
-      Gfx.debug "ok\n%!";
       jumping_anim_counter <- jumping_anim_counter + 1
+
+    method incr_shooting_counter = 
+      shooting_counter <- shooting_counter + 1
 
     method get_jumping_anim_counter = jumping_anim_counter
 
+    method get_shooting_counter = shooting_counter
+
     method reinit_jumping_anim_counter =
       jumping_anim_counter <- 0
+
+    method reinit_shooting_counter =
+      shooting_counter <- 0
   end
 
 class map_pixel =

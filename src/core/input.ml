@@ -88,7 +88,19 @@ let () =
         Portal.create_or_move_portal2 (i, j) map_pixel
     | None -> ());
 
-  register "e" (fun () -> Gfx.debug "bullet throwing not implemented%!\n");
+  register "e" (fun () ->
+    let p1 = Player.player1 () in
+    if p1#can_shoot then begin
+      Bullet.create p1;
+      p1#incr_shooting_counter
+    end);
+
+  register "o" (fun () ->
+    let p2 = Player.player2 () in
+    if p2#can_shoot then begin
+      Bullet.create p2;
+      p2#incr_shooting_counter
+    end);
 
   register "u" (fun () ->
     let p2 = Player.player2 () in
