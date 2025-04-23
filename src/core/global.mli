@@ -10,17 +10,17 @@ type t = {
   player1 : player;
   player2 : player;
 
-  texture_handler : (Texture_kind.t, Texture.t) Hashtbl.t;
+  texture_handler : (Texture.kind, Texture.t) Hashtbl.t;
 
   mutable portal1: ((int * int) * portal) option;
   mutable portal2: ((int * int) * portal) option;
 
   mutable waiting : int;
-  mutable state : Game_state.t
+  mutable state : State.t
 }
 
-val set_game_state : Game_state.t -> unit
-val get_game_state : unit -> Game_state.t
+val set_game_state : State.t -> unit
+val get_game_state : unit -> State.t
 
 val get : unit -> t
 val set : t -> unit

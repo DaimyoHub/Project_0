@@ -157,7 +157,7 @@ let move player v =
   player#velocity#set v
 
 let compute_texture player jp =
-  let open Texture_kind in
+  let open Texture in
   let is_one = 
     let compute = function Player (idx, _) -> idx = One | _ -> false
     in compute player#tag#get
@@ -200,10 +200,51 @@ let set_texture player texture =
   let texture =
     match Hashtbl.find_opt texture_handler texture with
     | Some t -> t
-    | None -> Texture.green
+    | None -> Texture.Raw.green
   in
   player#texture#set texture
   
 let jump player timeMilli =
   player#z_position#set (Some timeMilli);
   set_texture player (compute_texture player 0)
+
+let set_focused_map_pixel () =
+  let glb = Global.get () in
+
+  let focused_texture = Option.value
+    (Hashtbl.find_opt glb.texture_handler Texture.Focused_ground)
+    ~default: Texture.Raw.green
+  in
+
+  glb.map <-
+    Map_handler.iter_if glb.map
+      (fun pix -> pix#texture#get = focused_texture) 
+      (fun pix -> Map.set_map_pixel_texture glb.texture_handler pix);
+
+  let set_focused_pixel_texture player =
+    match get_focused_map_pixel player glb.map with
+    | Some ((i, j), pix) -> pix#texture#set focused_texture
+    | None -> ()
+  in
+
+  set_focused_pixel_texture (player1 ());
+  set_focused_pixel_texture (player2 ())
+
+let handle_jump_animation () =
+  let inner player =
+    if player#is_jumping then
+      if player#get_jumping_anim_counter < 60 then (
+        (if player#get_jumping_anim_counter = 20 then
+          set_texture player (compute_texture player 1)
+        else if player#get_jumping_anim_counter = 40 then
+          set_texture player (compute_texture player 2));
+
+        player#incr_jumping_anim_counter)
+      else (
+        player#reinit_jumping_anim_counter;
+        set_texture player (compute_texture player 3))
+    else ()
+  in
+
+  inner (player1 ());
+  inner (player2 ())

@@ -2,32 +2,10 @@ open System_defs
 open Component_defs
 open Ecs
 
-let set_focused_map_pixel () =
-  let glb = Global.get () in
-
-  let focused_texture = Option.value
-    (Hashtbl.find_opt glb.texture_handler Texture_kind.Focused_ground)
-    ~default: Texture.green
-  in
-
-  glb.map <-
-    Map_handler.iter_if glb.map
-      (fun pix -> pix#texture#get = focused_texture) 
-      (fun pix -> Map.set_map_pixel_texture glb.texture_handler pix);
-
-  let set_focused_pixel_texture player =
-    match Player.get_focused_map_pixel player glb.map with
-    | Some ((i, j), pix) -> pix#texture#set focused_texture
-    | None -> ()
-  in
-
-  set_focused_pixel_texture (Player.player1 ());
-  set_focused_pixel_texture (Player.player2 ())
-
 let prepare_texture_handler texture_handler images =
   List.iter (fun (i, n) ->
     let texture_kind = 
-      let open Texture_kind in
+      let open Texture in
       if      n = "map_pixel_ground"         then Ground
       else if n = "map_pixel_wall_1"         then Wall_1
       else if n = "map_pixel_wall_2"         then Wall_2
@@ -62,41 +40,21 @@ let prepare_texture_handler texture_handler images =
     Hashtbl.add texture_handler texture_kind i
   ) images
 
-let handle_jump_animation () =
-  let open Player in
-  let inner player =
-    if player#is_jumping then
-      if player#get_jumping_anim_counter < 60 then (
-        (if player#get_jumping_anim_counter = 20 then
-          set_texture player (compute_texture player 1)
-        else if player#get_jumping_anim_counter = 40 then
-          set_texture player (compute_texture player 2));
-
-        player#incr_jumping_anim_counter)
-      else (
-        player#reinit_jumping_anim_counter;
-        set_texture player (compute_texture player 3))
-    else ()
-  in
-
-  inner (player1 ());
-  inner (player2 ())
+let handle_game_state dt =
+  match Global.get_game_state () with
+  | Game -> begin
+      Move_system.update dt;
+      Collision_system.update dt;
+      Draw_system.update dt;
+    end
+  | Menu -> Menu_system.update dt
 
 let update dt =
   let () = Input.handle_input () in
 
-  set_focused_map_pixel ();
-  handle_jump_animation ();
- 
-  let _ =
-    match Global.get_game_state () with
-    | Game -> begin
-        Move_system.update dt;
-        Collision_system.update dt;
-        Draw_system.update dt;
-      end
-    | Menu -> Menu_system.update dt
-  in
+  Player.set_focused_map_pixel ();
+  Player.handle_jump_animation ();
+  handle_game_state dt;
 
   None
 
@@ -104,8 +62,8 @@ let set_textures () =
   Map.set_texture (Global.get ()).map;
 
   let open Player in
-  set_texture (player1 ()) Texture_kind.Player_1_right;
-  set_texture (player2 ()) Texture_kind.Player_2_left
+  set_texture (player1 ()) Texture.Player_1_right;
+  set_texture (player2 ()) Texture.Player_2_left
   
 let run () =
   let window_spec =

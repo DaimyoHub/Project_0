@@ -5,8 +5,8 @@ open Portal_tag
 let set_texture portal =
   let glb = Global.get () in
   let portal_texture = Option.value
-    (Hashtbl.find_opt glb.texture_handler Texture_kind.Portal)
-    ~default: Texture.green
+    (Hashtbl.find_opt glb.texture_handler Texture.Portal)
+    ~default: Texture.Raw.green
   in
   portal#texture#set portal_texture
 

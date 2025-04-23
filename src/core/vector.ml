@@ -7,8 +7,6 @@ let mult k a = { x = k*. a.x; y = k*. a.y }
 
 let norm a = sqrt (a.x *. a.x +. a.y *. a.y)
 
-let dot a = failwith "TODO"
-
 let normalize a =
   let norm = norm a in
   { x = a.x /. norm; y = a.y /. norm }

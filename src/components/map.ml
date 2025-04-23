@@ -31,7 +31,7 @@ let map () =
 
 let set_map_pixel_texture texture_handler map_pixel =
   let texture = 
-    let open Texture_kind in
+    let open Texture in
     let lvl = Map_handler.int_of_level map_pixel#get_level in
     let texture_kind =
       if      lvl = 0 then Ground
@@ -41,7 +41,7 @@ let set_map_pixel_texture texture_handler map_pixel =
     in
     match Hashtbl.find_opt texture_handler texture_kind with
     | Some t -> t
-    | None -> Texture.green
+    | None -> Texture.Raw.green
   in
   map_pixel#texture#set texture
 

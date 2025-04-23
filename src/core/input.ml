@@ -21,30 +21,30 @@ let handle_input () =
 
 let () =
   let open Player in
-  let open Texture_kind in
+  let open Texture in
 
-  register "m" (fun () -> Global.set_game_state Game_state.Menu);
-  register "p" (fun () -> Global.set_game_state Game_state.Game);
+  register "m" (fun () -> Global.set_game_state State.Menu);
+  register "p" (fun () -> Global.set_game_state State.Game);
 
   register "z" (fun () ->
     let p = player1 () in
-    set_texture p Player_1_top;
-    move p Cst.j1_v_up);
+    move p Cst.j1_v_up;
+    set_texture p Player_1_top);
 
   register "s" (fun () ->
     let p = player1 () in
-    set_texture p Player_1_bottom;
-    move p Cst.j1_v_down);
+    move p Cst.j1_v_down;
+    set_texture p Player_1_bottom);
 
   register "d" (fun () ->
     let p = player1 () in
-    set_texture p Player_1_right;
-    move p Cst.j1_v_right);
+    move p Cst.j1_v_right;
+    set_texture p Player_1_right);
 
   register "q" (fun () ->
     let p = player1 () in
-    set_texture p Player_1_left;
-    move p Cst.j1_v_left);
+    move p Cst.j1_v_left;
+    set_texture p Player_1_left);
 
   register "w" (fun () ->
     let open Player in

@@ -16,4 +16,4 @@ let create velocity =
     (* en cas de collision, faire disparaitre la balle *)
     ());
 
-  bullet#texture#set Texture.yellow
+  bullet#texture#set Texture.Raw.yellow
