@@ -16,7 +16,7 @@ let create_or_move_portal1 (i, j) map_pixel =
   let set_portal portal =
       portal#position#set map_pixel#position#get;
       portal#box#set map_pixel#box#get;
-      portal#tag#set (Portal (One, (i, j), portal));
+      portal#tag#set (Tag.Portal (One, (i, j), portal));
       set_texture portal;
 
       glb.portal1 <- Some ((i, j), portal)
@@ -36,7 +36,7 @@ let create_or_move_portal2 (i, j) map_pixel =
   let set_portal portal =
       portal#position#set map_pixel#position#get;
       portal#box#set map_pixel#box#get;
-      portal#tag#set (Portal (Two, (i, j), portal));
+      portal#tag#set (Tag.Portal (Two, (i, j), portal));
       set_texture portal;
 
       glb.portal2 <- Some ((i, j), portal)

@@ -1,11 +1,10 @@
 open Ecs
 open Component_defs
 open System_defs
-
-type idx = One | Two
-type tag += Player of idx * player
+open Tag
 
 let create (idx, name, x, y, width, height) =
+  let open Tag in
   let e = new player name in
   e#tag#set (Player (idx, e)) ;
   e#position#set Vector.{x = float x; y = float y};
@@ -13,13 +12,13 @@ let create (idx, name, x, y, width, height) =
   e#velocity#set Vector.zero;
   e#resolve#set (fun _ t ->
     match t#tag#get with
-    | Wall.HWall w -> (
+    | HWall w -> (
         (if w#position#get.y <> 0. then
           e#position#set (Vector.sub e#position#get Cst.j1_v_down)
         else
           e#position#set (Vector.sub e#position#get Cst.j1_v_up));
           e#velocity#set Vector.zero)
-    | Wall.VWall (_, w) -> (
+    | VWall (_, w) -> (
         (if w#position#get.x <> 0. then
           e#position#set (Vector.sub e#position#get Cst.j1_v_right)
         else
@@ -28,12 +27,9 @@ let create (idx, name, x, y, width, height) =
     (*
      * Je sais pas du tout comment gérer la physique, je te laisse cette partie...
      *)
-    | Map_pixel_tag.Mappix pix -> (
+    | Mappix pix -> (
         let z_pos = Option.value ~default: 1. pix#z_position#get in
         if z_pos > 0. then e#velocity#set Vector.zero)
-    | Exit_door.ExitDoor -> (
-          Global.set_game_state Menu
-    )
     | Player (_, p) -> 
       (
         let eposX = e#position#get.x in
@@ -72,10 +68,10 @@ let create (idx, name, x, y, width, height) =
           p#velocity#set Vector.zero
         )
       )
-    | Portal_tag.Portal (idx, (i, j), portal) ->
+    | Portal (idx, (i, j), portal) ->
         let glb = Global.get () in
           let open Vector in
-        if idx = Portal_tag.One then (
+        if idx = One then (
           match glb.portal2 with
           | Some (_, portal2) ->
               let new_pos = add

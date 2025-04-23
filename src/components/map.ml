@@ -24,7 +24,7 @@ let map () =
       width = Map_pixel.default_size.x;
       height = Map_pixel.default_size.y };
 
-    x#tag#set (Map_pixel_tag.Mappix (x :> z_position));
+    x#tag#set (Tag.Mappix (x :> z_position));
 
     Draw_system.(register (x :> t));
     if int_z_pos > 0 then Collision_system.(register (x :> t)))

@@ -14,7 +14,7 @@ let update _dt el =
 
   let map_pixels, other_entities =
     Seq.partition (fun e ->
-      match e#tag#get with | Map_pixel_tag.Mappix _ -> true | _ -> false) el
+      match e#tag#get with | Tag.Mappix _ -> true | _ -> false) el
   in
   
   let draw e =

@@ -1,7 +1,6 @@
 open Component_defs
 open System_defs
-
-type tag += HWall of wall| VWall of int * wall
+open Tag
 
 let wall (x, y, txt, width, height, horiz) =
   let e = new wall () in
