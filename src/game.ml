@@ -44,7 +44,7 @@ let handle_game_state dt =
   match Global.get_game_state () with
   | Game -> begin
       Move_system.update dt;
-      Collision_system.update dt;
+      Collide_system.update dt;
       Draw_system.update dt;
     end
   | Menu -> Menu_system.update dt

@@ -1,5 +1,4 @@
 open Component_defs
-open Game_state
 
 type t = {
   window : Gfx.window;

@@ -91,7 +91,7 @@ let create (idx, name, x, y, width, height) =
           | None -> ())
     | _ -> ());
   Draw_system.(register (e :> t));
-  Collision_system.(register (e :> t));
+  Collide_system.(register (e :> t));
   Move_system.(register (e :> t));
   e
 

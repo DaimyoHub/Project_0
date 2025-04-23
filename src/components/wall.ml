@@ -11,7 +11,7 @@ let wall (x, y, txt, width, height, horiz) =
   e#box#set Rect.{width; height};
   e#z_position#set (Some 1.);
   Draw_system.(register (e :> t));
-  Collision_system.(register (e :> t));
+  Collide_system.(register (e :> t));
   e
 
 let create () = 

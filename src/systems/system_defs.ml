@@ -1,7 +1,7 @@
 
 open Ecs
 
-module Collision_system = System.Make(Collision)
+module Collide_system = System.Make(Collide)
 
 module Draw_system = System.Make(Draw)
 

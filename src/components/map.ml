@@ -27,7 +27,7 @@ let map () =
     x#tag#set (Tag.Mappix (x :> z_position));
 
     Draw_system.(register (x :> t));
-    if int_z_pos > 0 then Collision_system.(register (x :> t)))
+    if int_z_pos > 0 then Collide_system.(register (x :> t)))
 
 let set_map_pixel_texture texture_handler map_pixel =
   let texture = 

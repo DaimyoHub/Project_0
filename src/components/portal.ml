@@ -1,6 +1,5 @@
 open Component_defs
 open System_defs
-open Portal_tag
 
 let set_texture portal =
   let glb = Global.get () in
@@ -26,7 +25,7 @@ let create_or_move_portal1 (i, j) map_pixel =
   | None -> begin
       let portal = new portal () in set_portal portal;
       Draw_system.register (portal :> Draw_system.t);
-      Collision_system.register (portal :> Collision_system.t)
+      Collide_system.register (portal :> Collide_system.t)
     end
   | Some ((_, _), portal) -> set_portal portal
 
@@ -46,6 +45,6 @@ let create_or_move_portal2 (i, j) map_pixel =
   | None -> begin
       let portal = new portal () in set_portal portal;
       Draw_system.register (portal :> Draw_system.t);
-      Collision_system.register (portal :> Collision_system.t)
+      Collide_system.register (portal :> Collide_system.t)
     end
   | Some ((_, _), portal) -> set_portal portal
