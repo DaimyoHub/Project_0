@@ -50,6 +50,7 @@ let handle_game_state dt =
   | Menu -> Menu_system.update dt
 
 let update dt =
+  let () = Player.stop_players () in
   let () = Input.handle_input () in
 
   Player.set_focused_map_pixel ();

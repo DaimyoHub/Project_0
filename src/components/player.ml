@@ -16,20 +16,34 @@ let create (idx, name, x, y, width, height) =
         (if w#position#get.y <> 0. then
           e#position#set (Vector.sub e#position#get Cst.j1_v_down)
         else
-          e#position#set (Vector.sub e#position#get Cst.j1_v_up));
-          e#velocity#set Vector.zero)
+          e#position#set (Vector.sub e#position#get Cst.j1_v_up)
+        );
+        e#velocity#set Vector.zero)
     | VWall (_, w) -> (
         (if w#position#get.x <> 0. then
           e#position#set (Vector.sub e#position#get Cst.j1_v_right)
         else
-          e#position#set (Vector.sub e#position#get Cst.j1_v_left));
-          e#velocity#set Vector.zero)
+          e#position#set (Vector.sub e#position#get Cst.j1_v_left)
+        );
+        e#velocity#set Vector.zero)
     (*
      * Je sais pas du tout comment gérer la physique, je te laisse cette partie...
      *)
     | Mappix pix -> (
-        let z_pos = Option.value ~default: 1. pix#z_position#get in
-        if z_pos > 0. then e#velocity#set Vector.zero)
+        let z_pos = Option.value ~default: 0. pix#z_position#get in
+        let player_z = match e#z_position#get with | Some x -> x | None -> 0. in
+        Gfx.debug "%f %f\n%!" z_pos player_z;
+        if z_pos > 0. then 
+        (
+          if (player_z=0.) then
+            let vel = e#velocity#get in
+            let newVect = (Vector.{x=(-1.*.vel.x); y=(-1.*.vel.y)}) in 
+            e#position#set (Vector.add e#position#get newVect)
+          else
+            e#z_position#set (Some (Unix.gettimeofday ()));
+            e#velocity#set Vector.zero
+        ) 
+      )
     | Player (_, p) -> 
       (
         let eposX = e#position#get.x in
