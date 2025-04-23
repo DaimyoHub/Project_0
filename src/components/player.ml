@@ -93,6 +93,7 @@ let create (idx, name, x, y, width, height) =
   Draw_system.(register (e :> t));
   Collide_system.(register (e :> t));
   Move_system.(register (e :> t));
+  Wind_system.(register (e :> t));
   e
 
 let create_both map =

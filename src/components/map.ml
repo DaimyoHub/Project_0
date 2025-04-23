@@ -46,7 +46,5 @@ let set_map_pixel_texture texture_handler map_pixel =
   map_pixel#texture#set texture
 
 let set_texture map =
-  let _ =
-    let th = (Global.get ()).texture_handler in
-    Map_handler.iteri map (fun i j x -> set_map_pixel_texture th x)
-  in ()
+  let th = (Global.get ()).texture_handler in
+  Map_handler.iteri map (fun i j x -> set_map_pixel_texture th x)

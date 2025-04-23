@@ -40,12 +40,30 @@ let prepare_texture_handler texture_handler images =
     Hashtbl.add texture_handler texture_kind i
   ) images
 
+let prepare_config window ctx texture_handler =
+  let _walls = Wall.create () in
+  let map = Map.map () in
+  let player1, player2 = Player.create_both map in
+
+  Global.(set {
+    window;
+    ctx;
+    map;
+    player1; player2;
+    waiting = 1;
+    state = Game;
+    texture_handler;
+    portal1 = None;
+    portal2 = None;
+  })
+
 let handle_game_state dt =
   match Global.get_game_state () with
   | Game -> begin
       Move_system.update dt;
       Collide_system.update dt;
       Draw_system.update dt;
+      Wind_system.update dt;
     end
   | Menu -> Menu_system.update dt
 
@@ -59,7 +77,7 @@ let update dt =
   None
 
 let set_textures () =
-  Map.set_texture (Global.get ()).map;
+  let _ = Map.set_texture (Global.get ()).map in
 
   let open Player in
   set_texture (player1 ()) Texture.Player_1_right;
@@ -99,27 +117,8 @@ let run () =
           else None)
         (fun images ->
           let th = Hashtbl.create 10 in
-
           prepare_texture_handler th images;
-
-          let _walls = Wall.create ()
-          and map = Map.map () in
-          let player1, player2 = Player.create_both map in
-
-          let cfg = Global.{
-            window;
-            ctx;
-            map;
-            player1; player2;
-            waiting = 1;
-            state = Game;
-            texture_handler = th;
-            portal1 = None;
-            portal2 = None;
-          }
-          in Global.set cfg;
-
+          prepare_config window ctx th;
           set_textures ();
-
           Gfx.main_loop update (fun () -> ())
         ))
