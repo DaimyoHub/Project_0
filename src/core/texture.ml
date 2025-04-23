@@ -59,3 +59,5 @@ type kind =
   | Player_2_top_jump_1
 
   | Portal
+
+  | Wind_particle

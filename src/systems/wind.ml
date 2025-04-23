@@ -1,7 +1,7 @@
 open Ecs
 open Component_defs
 
-type t = player
+type t = passive_movable
 
 let init _ = ()
 
@@ -34,8 +34,11 @@ let update dt entities =
     (fun (p : t) ->
       if is_in_wind_area wind_area p then
         let mapped_wind_vect =
-          if p#is_jumping then Vector.mult 2. wind_vect
-          else wind_vect
+          match p#tag#get with
+          | Tag.Player _ ->
+              if p#z_position#get <> None then Vector.mult 2. wind_vect
+              else wind_vect
+          | _ -> Vector.mult 2. wind_vect
         in
         p#position#set @@ Vector.add p#position#get mapped_wind_vect)
     entities

@@ -15,7 +15,9 @@ type t = {
   mutable portal2: ((int * int) * portal) option;
 
   mutable waiting : int;
-  mutable state : State.t
+  mutable state : State.t;
+
+  particles: particle list;
 }
 
 let state = ref None

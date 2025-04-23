@@ -70,10 +70,20 @@ class type drawable =
 
 class type movable =
 object
+  inherit tagged
   inherit Entity.t
   inherit position 
   inherit velocity
   inherit z_position
+end
+
+class type passive_movable =
+object
+  inherit tagged
+  inherit Entity.t
+  inherit position
+  inherit z_position
+  inherit box
 end
 
 (** Entités :
@@ -141,16 +151,6 @@ class wall () =
     inherit z_position ()
   end
 
-class exitDoor () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit box ()
-    inherit tagged ()
-    inherit texture ()
-    inherit resolver ()
-  end
-
 class bullet () =
   object
     inherit Entity.t ()
@@ -172,4 +172,14 @@ class portal () =
     inherit box ()
     inherit resolver ()
     inherit texture ()
+  end
+
+class particle () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit z_position ()
+    inherit tagged ()
+    inherit texture ()
+    inherit box ()
   end

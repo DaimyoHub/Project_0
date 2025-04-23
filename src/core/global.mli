@@ -15,7 +15,9 @@ type t = {
   mutable portal2: ((int * int) * portal) option;
 
   mutable waiting : int;
-  mutable state : State.t
+  mutable state : State.t;
+
+  particles: particle list;
 }
 
 val set_game_state : State.t -> unit

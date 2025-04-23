@@ -34,6 +34,7 @@ let prepare_texture_handler texture_handler images =
       else if n = "player_1_top_jump_1"      then Player_1_top_jump_1
       else if n = "player_2_top_jump_0"      then Player_2_top_jump_0
       else if n = "player_2_top_jump_1"      then Player_2_top_jump_1
+      else if n = "wind_particle"            then Wind_particle
       else if n = "portal"                   then Portal
       else (* n = "map_pixel_wall_3" then *)      Wall_3
     in
@@ -44,6 +45,7 @@ let prepare_config window ctx texture_handler =
   let _walls = Wall.create () in
   let map = Map.map () in
   let player1, player2 = Player.create_both map in
+  let particles = Wind_particle.create () in
 
   Global.(set {
     window;
@@ -55,6 +57,7 @@ let prepare_config window ctx texture_handler =
     texture_handler;
     portal1 = None;
     portal2 = None;
+    particles;
   })
 
 let handle_game_state dt =
@@ -72,16 +75,19 @@ let update dt =
 
   Player.set_focused_map_pixel ();
   Player.handle_jump_animation ();
+  Wind_particle.respawn_particles_at_left ();
   handle_game_state dt;
 
   None
 
-let set_textures () =
+let set_textures particles =
   let _ = Map.set_texture (Global.get ()).map in
 
   let open Player in
   set_texture (player1 ()) Texture.Player_1_right;
-  set_texture (player2 ()) Texture.Player_2_left
+  set_texture (player2 ()) Texture.Player_2_left;
+
+  Wind_particle.set_texture (Global.get ()).particles
   
 let run () =
   let window_spec =
