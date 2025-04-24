@@ -23,19 +23,6 @@ let draw ctx dst pos box src =
     Gfx.set_color ctx c;
     Gfx.fill_rect ctx dst x y width height
 
-(**
-   Texture.set key default
-
-   Tries to get the good texture according to [key]. If it is not found in the 
-   texture handler, a default texture is given.
-
-   The texture handler should be loaded in order to get the right texture.
- *)
-let get key default =
-  Option.value
-    (Hashtbl.find_opt (Global.get ()).texture_handler key)
-    ~default: default
-
 type kind =
   | Ground
   | Wall_1

@@ -150,10 +150,9 @@ let move player v = player#velocity#set v
 
 let set_texture player texture =
   let texture_handler = (Global.get ()).texture_handler in
-  let texture =
-    match Hashtbl.find_opt texture_handler texture with
-    | Some t -> t
-    | None -> Texture.Raw.green
+  let texture = Option.value
+    (Hashtbl.find_opt texture_handler texture)
+    ~default: Texture.Raw.green
   in
   player#texture#set texture
 
@@ -246,7 +245,10 @@ let set_focused_map_pixel () =
   let glb = Global.get () in
 
   let open Texture in
-  let focused_texture = get Focused_ground Raw.green in
+  let focused_texture = Option.value
+    (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Focused_ground)
+    ~default: Texture.Raw.green
+  in
 
   glb.map <-
     Map_handler.iter_if glb.map

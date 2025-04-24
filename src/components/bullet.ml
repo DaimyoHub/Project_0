@@ -22,8 +22,10 @@ let create player =
     Move_system.unregister    (bullet :> Move_system.t);
     Collide_system.unregister (bullet :> Collide_system.t));
 
-  let open Texture in
-  let bullet_texture = get Bullet Raw.yellow in
+  let bullet_texture = Option.value 
+    (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Bullet)
+    ~default: Texture.Raw.yellow
+  in
   bullet#texture#set bullet_texture;
 
   Draw_system.register    (bullet :> Draw_system.t);

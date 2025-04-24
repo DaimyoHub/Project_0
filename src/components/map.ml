@@ -53,7 +53,9 @@ let set_map_pixel_texture texture_handler map_pixel =
       else if lvl = 2 then Wall_2
       else (* lvl = 3 *)   Wall_3
     in
-    get texture_kind Raw.Green
+    Option.value
+      (Hashtbl.find_opt (Global.get ()).texture_handler texture_kind)
+      ~default: Raw.green
   in
   map_pixel#texture#set texture
 

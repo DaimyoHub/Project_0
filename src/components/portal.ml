@@ -7,9 +7,10 @@ open System_defs
    Sets the convenient texture to the given [portal].
  *)
 let set_texture portal =
-  let glb = Global.get () in
-  let open Texture in
-  let portal_texture = get Portal Raw.green in
+  let portal_texture = Option.value
+    (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Portal)
+    ~default: Texture.Raw.green
+  in
   portal#texture#set portal_texture
 
 (**

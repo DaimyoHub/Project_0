@@ -7,8 +7,10 @@ open System_defs
    Sets the texture of every particles contained in [particles].
  *)
 let set_texture particles =
-  let open Texture in
-  let particle_texture = get Wind_particle Raw.white in
+  let particle_texture = Option.value
+    (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Wind_particle)
+    ~default: Texture.Raw.white
+  in
   List.iter (fun p -> p#texture#set particle_texture) particles
 
 (**
