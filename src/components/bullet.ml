@@ -1,21 +1,26 @@
 open Component_defs
 open Size
 open System_defs
+open Tag
 
 (**
  * Bullet.create player
  *
- * Ceates a bullet shot by [player]. The bullet is registered in the draw, move
+ * Creates a bullet shot by [player]. The bullet is registered in the draw, move
  * and collide system. When it touches something, it is unregistered from them.
  *)
 let create player =
   let bullet = new bullet () in
-
+  bullet#tag#set (Bullet bullet);
   bullet#box#set Rect.{ width = 4; height = 4 };
 
   bullet#velocity#set (Vector.mult 3. player#velocity#get);
 
-  bullet#position#set (Vector.add player#position#get player#velocity#get);
+  bullet#position#set (Vector.add player#position#get (Vector.mult 10. player#velocity#get));
+
+  Draw_system.register    (bullet :> Draw_system.t);
+  Move_system.register    (bullet :> Move_system.t);
+  Collide_system.register (bullet :> Collide_system.t);
 
   bullet#resolve#set (fun _ t ->
     Draw_system.unregister    (bullet :> Draw_system.t);
@@ -27,7 +32,4 @@ let create player =
     ~default: Texture.Raw.yellow
   in
   bullet#texture#set bullet_texture;
-
-  Draw_system.register    (bullet :> Draw_system.t);
-  Move_system.register    (bullet :> Move_system.t);
-  Collide_system.register (bullet :> Collide_system.t)
+  player#reinit_shooting_counter

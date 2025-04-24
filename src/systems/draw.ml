@@ -19,7 +19,11 @@ let update _dt el =
   
   let draw e =
     let pos = e#position#get and box = e#box#get and txt = e#texture#get in
-    Texture.draw ctx surface pos box txt
+  (match ((e :> tagged)#tag#get) with
+  | Tag.Bullet b -> Gfx.debug "Bullet printed\n%!";
+  | _ -> ()
+  );
+  Texture.draw ctx surface pos box txt
   in
 
   Seq.iter draw map_pixels;

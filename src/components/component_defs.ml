@@ -96,6 +96,7 @@ class player name =
 
     val mutable jumping_anim_counter = 0
     val mutable shooting_counter = 0
+    val mutable atk_speed = 100
 
     method is_jumping = jumping_anim_counter <> 0
     method can_shoot = shooting_counter = 0
@@ -115,6 +116,9 @@ class player name =
 
     method reinit_shooting_counter =
       shooting_counter <- 0
+
+    method get_max_atk_speed =
+      atk_speed
   end
 
 class map_pixel =

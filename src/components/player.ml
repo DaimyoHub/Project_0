@@ -40,7 +40,6 @@ let create (idx, name, x, y, width, height) =
     | Mappix pix -> (
         let z_pos = Option.value ~default: 0. pix#z_position#get in
         let player_z = match e#z_position#get with | Some x -> x | None -> 0. in
-        Gfx.debug "%f %f\n%!" z_pos player_z;
         if z_pos > 0. then 
         (
           if (player_z=0.) then
@@ -57,7 +56,7 @@ let create (idx, name, x, y, width, height) =
         let eposX = e#position#get.x in
         let eposY = e#position#get.y in
         if (eposX>0. && eposX<(float_of_int Cst.window_width) &&
-            eposY>0. && eposX<(float_of_int Cst.window_height)) then
+            eposY>0. && eposY<(float_of_int Cst.window_height)) then
           (
           let x_diff = eposX-.p#position#get.x in
           let y_diff = eposY-.p#position#get.y in
@@ -107,7 +106,11 @@ let create (idx, name, x, y, width, height) =
                 portal2#position#get
                 (mult 24. (normalize e#velocity#get))
               in
-              e#position#set new_pos
+              let posX = new_pos.x in
+              let posY = new_pos.y in
+              if (posX>0. && posX<(float_of_int Cst.window_width)-.24. &&
+                  posY>0. && posY<(float_of_int Cst.window_height)-.24.) then
+                    e#position#set new_pos
           | None -> ())
         else (
           match glb.portal1 with
@@ -116,7 +119,11 @@ let create (idx, name, x, y, width, height) =
                 portal1#position#get
                 (mult 24. (normalize e#velocity#get))
               in
-              e#position#set new_pos;
+              let posX = new_pos.x in
+              let posY = new_pos.y in
+              if (posX>0. && posX<(float_of_int Cst.window_width)-.24. &&
+                  posY>0. && posY<(float_of_int Cst.window_height)-.24.) then
+                    e#position#set new_pos
           | None -> ())
     | _ -> ());
 
@@ -303,7 +310,7 @@ let handle_jump_animation () =
   inner (player1 ());
   inner (player2 ())
 
-(**
+(*
    Player.handle_shooting ()
 
    Handles the shooting phase of both players. In order not to make the game 
@@ -311,7 +318,7 @@ let handle_jump_animation () =
  *)
 let handle_shooting () =
   let inner player =
-    if player#get_shooting_counter < 10 then player#incr_shooting_counter
+    if player#get_shooting_counter < player#get_max_atk_speed then player#incr_shooting_counter
     else player#reinit_shooting_counter
   in
 

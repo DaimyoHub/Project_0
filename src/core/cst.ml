@@ -12,14 +12,14 @@ let j2_y = 60
 let j1_color = Texture.Raw.blue
 let j2_color = Texture.Raw.red
 
-let j1_v_up = Vector.{ x = 0.0; y = -3.0 }
+let j1_v_up = Vector.{ x = 0.0; y = -2.0 }
 let j1_v_down = Vector.sub Vector.zero j1_v_up
-let j1_v_left = Vector.{ x = -3.0; y = 0.0 }
+let j1_v_left = Vector.{ x = -2.0; y = 0.0 }
 let j1_v_right = Vector.sub Vector.zero j1_v_left
 
-let j2_v_up = Vector.{ x = 0.0; y = -3.0 }
+let j2_v_up = Vector.{ x = 0.0; y = -2.0 }
 let j2_v_down = Vector.sub Vector.zero j2_v_up
-let j2_v_left = Vector.{ x = -3.0; y = 0.0 }
+let j2_v_left = Vector.{ x = -2.0; y = 0.0 }
 let j2_v_right = Vector.sub Vector.zero j2_v_left
 
 let ball_size = 24
