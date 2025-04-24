@@ -33,6 +33,7 @@ let prepare_config window ctx texture_handler =
    updates every systems and particular aspects of some entities.
  *)
 let update dt =
+  let () = Player.stop_players () in
   let () = Input.handle_input () in
 
   Player.set_focused_map_pixel ();

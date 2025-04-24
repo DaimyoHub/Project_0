@@ -16,6 +16,7 @@ let create () =
   let m = make_flat_map { x = 31; y = 23 }
     |> up_on_range 2 5 3 5 3
     |> up_on_range 1 13 2 9 2
+    |> up_on_range 1 18 6 14 4
     |> set_level_as 0 0 Map_pixel.StartA
     |> set_level_as 30 22 Map_pixel.StartB
   in
