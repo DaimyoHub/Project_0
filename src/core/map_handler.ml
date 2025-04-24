@@ -16,36 +16,36 @@ let int_of_level level =
   in
   compute_level 0 level
 
-(* Default map size *)
 let default_size = { x = 10; y = 10 }
 
-(*
- * make_flat_map size
- *
- * Construit une map de la taille size donnée.
+(**
+   Map_handler.make_flat_map size
+  
+   Construit une map de la taille size donnée.
  *)
 let make_flat_map size =
   {
     size = size;
-    data = Array.init size.x (fun _ -> Array.init size.y (fun _ -> new map_pixel))
+    data = Array.init size.x
+      (fun _ -> Array.init size.y (fun _ -> new map_pixel))
   }
 
-(*
- * is_position_in_bounds map x y
- *
- * Vérifie que la position donnée apparait sur la map.
+(**
+   Map_handler.is_position_in_bounds map x y
+  
+   Vérifie que la position donnée apparait sur la map.
  *)
 let is_position_in_bounds map x y =
      0 <= x && x < map.size.x
   && 0 <= y && y < map.size.y
 
-(*
- * up_on_range map height x x_length y y_length
- *
- * Surelève un rectangle donné de la map de height niveaux.
- *
- * TODO: Mémoïser les level qui ont viennent d'être calculés pour éviter de
- * les recalculer à chaque fois
+(**
+   Map_handler.up_on_range map height x x_length y y_length
+  
+   Surelève un rectangle donné de la map de height niveaux.
+  
+   TODO: Mémoïser les level qui ont viennent d'être calculés pour éviter de
+   les recalculer à chaque fois
  *)
 let up_on_range height x x_length y y_length map =
   let end_x = x + x_length - 1 and end_y = y + y_length - 1 in
@@ -59,15 +59,16 @@ let up_on_range height x x_length y y_length map =
   in
   for i = x to x + x_length - 1 do
     for j = y to y + y_length - 1 do
-      map.data.(i).(j)#set_level (up_level_by_height map.data.(i).(j)#get_level height)
+      map.data.(i).(j)#set_level
+        (up_level_by_height map.data.(i).(j)#get_level height)
     done
   done;
   map
 
-(*
- * set_level_as map x y kind
- *
- * Convertit le point donné de la map en un niveau du type kind.
+(**
+   Map_handler.set_level_as map x y kind
+ 
+   Convertit le point donné de la map en un niveau du type kind.
  *)
 let set_level_as x y kind map =
   assert (is_position_in_bounds map x y);
@@ -79,6 +80,11 @@ let set_level_as x y kind map =
   map.data.(x).(y)#set_level (set_level kind map.data.(x).(y)#get_level);
   map
 
+(**
+   Map_handler.iter_if map pred f
+
+   Pour chaque pixel de [map] vérifiant [pred], on appelle f.
+ *)
 let iter_if map pred f =
   for i = 0 to map.size.x - 1 do
     for j = 0 to map.size.y - 1 do
@@ -88,8 +94,19 @@ let iter_if map pred f =
   done;
   map
 
+(**
+   Map_handler.iter map f
+
+   On appelle f pour chaque pixel de [map].
+ *)
 let iter map = iter_if map (fun _ -> true)
 
+(**
+   Map_handler.iteri_if map pred f
+
+   Pareil que pour Map_handler.iter_if, mais f prend aussi les coordonnées du 
+   pixel courant.
+ *)
 let iteri_if map pred f =
   for i = 0 to map.size.x - 1 do
     for j = 0 to map.size.y - 1 do
@@ -99,8 +116,19 @@ let iteri_if map pred f =
   done;
   map
 
+(**
+   Map_handler.iteri_if map pred f
+
+   Pareil que pour Map_handler.iter, mais f prend aussi les coordonnées du 
+   pixel courant.
+ *)
 let iteri map = iteri_if map (fun _ _ _ -> true)
 
+(**
+   Map_handler.is_pixel_of_kind map i j kind
+
+   Vérifie que le pixel de [map] aux coordonnées ([i], [j]) est du type [kind].
+ *)
 let is_pixel_of_kind map i j kind =
   assert (is_position_in_bounds map i j);
 
@@ -110,6 +138,11 @@ let is_pixel_of_kind map i j kind =
   in
   (fold map.data.(i).(j)#get_level) = kind
 
+(**
+   Map_handler.get_pixel map i j
+
+   Extrait le pixel de [map] aux coordonnées ([i], [j]).
+ *)
 let get_pixel map i j =
   assert (is_position_in_bounds map i j);
 

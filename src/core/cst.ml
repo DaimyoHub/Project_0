@@ -1,15 +1,3 @@
-(*
-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-V                               V
-V  1                         2  V
-V  1 B                       2  V
-V  1                         2  V
-V  1                         2  V
-V                               V
-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-*)
-
-
 let window_width = 800
 let window_height = 600
 

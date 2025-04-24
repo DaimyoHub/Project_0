@@ -11,13 +11,12 @@ let register key action = Hashtbl.replace action_table key action
 let handle_input () =
   let () =
     match Gfx.poll_event () with
-      KeyDown s -> set_key s
+    | KeyDown s -> set_key s
     | KeyUp s -> unset_key s
     | Quit -> exit 0
     | _ -> ()
   in
-  Hashtbl.iter (fun key action ->
-      if has_key key then action ()) action_table
+  Hashtbl.iter (fun key action -> if has_key key then action ()) action_table
 
 let () =
   let open Player in

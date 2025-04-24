@@ -2,45 +2,11 @@ open System_defs
 open Component_defs
 open Ecs
 
-let prepare_texture_handler texture_handler images =
-  List.iter (fun (i, n) ->
-    let texture_kind = 
-      let open Texture in
-      if      n = "map_pixel_ground"         then Ground
-      else if n = "map_pixel_wall_1"         then Wall_1
-      else if n = "map_pixel_wall_2"         then Wall_2
-      else if n = "player_1_right"           then Player_1_right
-      else if n = "player_2_right"           then Player_2_right
-      else if n = "player_1_left"            then Player_1_left
-      else if n = "player_2_left"            then Player_2_left
-      else if n = "player_1_bottom"          then Player_1_bottom
-      else if n = "player_2_bottom"          then Player_2_bottom
-      else if n = "player_1_top"             then Player_1_top
-      else if n = "player_2_top"             then Player_2_top
-      else if n = "focused_map_pixel_ground" then Focused_ground
-      else if n = "player_1_right_jump_0"    then Player_1_right_jump_0
-      else if n = "player_1_right_jump_1"    then Player_1_right_jump_1
-      else if n = "player_2_right_jump_0"    then Player_2_right_jump_0
-      else if n = "player_2_right_jump_1"    then Player_2_right_jump_1
-      else if n = "player_1_left_jump_0"     then Player_1_left_jump_0
-      else if n = "player_1_left_jump_1"     then Player_1_left_jump_1
-      else if n = "player_2_left_jump_0"     then Player_2_left_jump_0
-      else if n = "player_2_left_jump_1"     then Player_2_left_jump_1
-      else if n = "player_1_bottom_jump_0"   then Player_1_bottom_jump_0
-      else if n = "player_1_bottom_jump_1"   then Player_1_bottom_jump_1
-      else if n = "player_2_bottom_jump_0"   then Player_2_bottom_jump_0
-      else if n = "player_2_bottom_jump_1"   then Player_2_bottom_jump_1
-      else if n = "player_1_top_jump_0"      then Player_1_top_jump_0
-      else if n = "player_1_top_jump_1"      then Player_1_top_jump_1
-      else if n = "player_2_top_jump_0"      then Player_2_top_jump_0
-      else if n = "player_2_top_jump_1"      then Player_2_top_jump_1
-      else if n = "wind_particle"            then Wind_particle
-      else if n = "portal"                   then Portal
-      else (* n = "map_pixel_wall_3" then *)      Wall_3
-    in
-    Hashtbl.add texture_handler texture_kind i
-  ) images
+(**
+   Game.prepare_config window ctx texture_handler
 
+   Constructs the configuration of the game.
+ *)
 let prepare_config window ctx texture_handler =
   let _walls = Wall.create () in
   let map = Map.create () in
@@ -60,16 +26,12 @@ let prepare_config window ctx texture_handler =
     particles;
   })
 
-let handle_game_state dt =
-  match Global.get_game_state () with
-  | Game -> begin
-      Move_system.update dt;
-      Collide_system.update dt;
-      Draw_system.update dt;
-      Wind_system.update dt;
-    end
-  | Menu -> Menu_system.update dt
+(**
+   Game.update dt
 
+   It is the function that is called at each iteration of the game loop. It 
+   updates every systems and particular aspects of some entities.
+ *)
 let update dt =
   let () = Input.handle_input () in
 
@@ -77,10 +39,25 @@ let update dt =
   Player.handle_jump_animation ();
   Player.handle_shooting ();
   Wind_particle.respawn_particles_at_left ();
-  handle_game_state dt;
+
+  let _ = 
+    match Global.get_game_state () with
+    | Game -> begin
+        Move_system.update dt;
+        Collide_system.update dt;
+        Draw_system.update dt;
+        Wind_system.update dt;
+      end
+    | Menu -> Menu_system.update dt
+  in
 
   None
 
+(**
+   Game.set_textures particles
+
+   Sets the textures to all the entities in the good order.
+ *)
 let set_textures particles =
   let _ = Map.set_texture (Global.get ()).map in
 
@@ -89,7 +66,12 @@ let set_textures particles =
   set_texture (player2 ()) Texture.Player_2_left;
 
   Wind_particle.set_texture (Global.get ()).particles
-  
+
+(**
+   Game.run ()
+
+   Runs the game.
+ *)
 let run () =
   let window_spec =
     Format.sprintf "game_canvas:%dx%d:" Cst.window_width Cst.window_height
@@ -101,30 +83,12 @@ let run () =
   Gfx.main_loop
     (fun _ -> Gfx.get_resource_opt tile_set_r)
     (fun tile_set -> 
-      let images_and_pure_names = tile_set
-        |> String.split_on_char '\n'
-        |> List.filter (fun s -> s <> "")
-        |> List.map (fun s ->
-            let pure_name =
-              match String.split_on_char '.' s with
-              | s :: _ -> s
-              | [] -> ""
-            in
-            Gfx.load_image ctx ("resources/images/" ^ s), pure_name)
-      in
-
+      let images_and_names = Texture_loader.parse_tile_set ctx tile_set in
       Gfx.main_loop
-        (fun _ ->
-          if List.for_all
-            (fun (s, _) -> Gfx.resource_ready s) images_and_pure_names then
-              Some (
-                List.map (fun (s, n) -> Texture.Image s, n)
-                  (List.map
-                    (fun (s, n) -> Gfx.get_resource s, n) images_and_pure_names))
-          else None)
+        (fun _ -> Texture_loader.get_resources images_and_names)
         (fun images ->
           let th = Hashtbl.create 10 in
-          prepare_texture_handler th images;
+          Texture_loader.prepare_texture_handler th images;
           prepare_config window ctx th;
           set_textures ();
           Gfx.main_loop update (fun () -> ())

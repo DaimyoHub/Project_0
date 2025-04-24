@@ -297,7 +297,7 @@ let handle_jump_animation () =
  *)
 let handle_shooting () =
   let inner player =
-    if player#get_shooting_counter < 20 then player#incr_shooting_counter
+    if player#get_shooting_counter < 10 then player#incr_shooting_counter
     else player#reinit_shooting_counter
   in
 
