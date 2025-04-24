@@ -44,11 +44,6 @@ class resolver () =
     method resolve = r
   end
 
-(** Interfaces : ici on liste simplement les types des classes dont on hérite
-    si deux classes définissent les mêmes méthodes, celles de la classe écrite
-    après sont utilisées (héritage multiple).
-*)
-
 class type collidable =
   object
     inherit Entity.t
@@ -86,10 +81,8 @@ object
   inherit box
 end
 
-(** Entités :
-    Ici, dans inherit, on appelle les constructeurs pour qu'ils initialisent
-    leur partie de l'objet, d'où la présence de l'argument ()
-*)
+(* List of entities used in the game. *)
+
 class player name =
   object
     inherit Entity.t ~name ()

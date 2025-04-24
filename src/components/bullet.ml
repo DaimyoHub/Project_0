@@ -2,14 +2,16 @@ open Component_defs
 open Size
 open System_defs
 
-let default_size = { x = 4; y = 4 }
-
+(**
+ * Bullet.create player
+ *
+ * Ceates a bullet shot by [player]. The bullet is registered in the draw, move
+ * and collide system. When it touches something, it is unregistered from them.
+ *)
 let create player =
   let bullet = new bullet () in
 
-  bullet#box#set Rect.{
-    width = default_size.x;
-    height = default_size.y };
+  bullet#box#set Rect.{ width = 4; height = 4 };
 
   bullet#velocity#set (Vector.mult 3. player#velocity#get);
 
@@ -20,10 +22,8 @@ let create player =
     Move_system.unregister    (bullet :> Move_system.t);
     Collide_system.unregister (bullet :> Collide_system.t));
 
-  let bullet_texture = Option.value
-    (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Bullet)
-    ~default: Texture.Raw.yellow
-  in
+  let open Texture in
+  let bullet_texture = get Bullet Raw.yellow in
   bullet#texture#set bullet_texture;
 
   Draw_system.register    (bullet :> Draw_system.t);

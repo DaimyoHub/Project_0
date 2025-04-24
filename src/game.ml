@@ -43,7 +43,7 @@ let prepare_texture_handler texture_handler images =
 
 let prepare_config window ctx texture_handler =
   let _walls = Wall.create () in
-  let map = Map.map () in
+  let map = Map.create () in
   let player1, player2 = Player.create_both map in
   let particles = Wind_particle.create () in
 

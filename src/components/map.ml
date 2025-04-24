@@ -3,7 +3,15 @@ open Component_defs
 open System_defs
 open Map_pixel
 
-let map () =
+(**
+   Map.create ()
+  
+   Creates a specific map, sets all of its pixels as entities and register them
+   in the draw system and in the collide system for pixels lying in the air.
+  
+   See modules Map_handler and Map_pixel for more informations.
+ *)
+let create () =
   let open Map_handler in
   let m = make_flat_map { x = 31; y = 23 }
     |> up_on_range 2 5 3 5 3
@@ -29,6 +37,12 @@ let map () =
     Draw_system.(register (x :> t));
     if int_z_pos > 0 then Collide_system.(register (x :> t)))
 
+(**
+   Map.set_map_pixel_texture texture_handler map_pixel
+  
+   Sets the good texture to the given pixel. The texture handler must be loaded
+   before calling this function.
+ *)
 let set_map_pixel_texture texture_handler map_pixel =
   let texture = 
     let open Texture in
@@ -39,12 +53,15 @@ let set_map_pixel_texture texture_handler map_pixel =
       else if lvl = 2 then Wall_2
       else (* lvl = 3 *)   Wall_3
     in
-    match Hashtbl.find_opt texture_handler texture_kind with
-    | Some t -> t
-    | None -> Texture.Raw.green
+    get texture_kind Raw.Green
   in
   map_pixel#texture#set texture
 
+(**
+   Map.set_texture map
+  
+   Sets the texture of each pixels of the map.
+ *)
 let set_texture map =
   let th = (Global.get ()).texture_handler in
   Map_handler.iteri map (fun i j x -> set_map_pixel_texture th x)

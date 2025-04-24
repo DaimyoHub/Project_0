@@ -1,13 +1,21 @@
 open Component_defs
 open System_defs
 
+(**
+   Wind_particle.set_texture particles
+
+   Sets the texture of every particles contained in [particles].
+ *)
 let set_texture particles =
-  let particle_texture = Option.value
-    (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Wind_particle)
-    ~default: Texture.Raw.white
-  in
+  let open Texture in
+  let particle_texture = get Wind_particle Raw.white in
   List.iter (fun p -> p#texture#set particle_texture) particles
 
+(**
+   Wind_particle.random_int_between (a, b)
+
+   Chooses a random int number between floats [a] and [b].
+ *)
 let random_int_between (a, b) =
   let low = int_of_float (ceil (min a b)) in
   let high = int_of_float (floor (max a b)) in
@@ -16,6 +24,14 @@ let random_int_between (a, b) =
   else
     low + Random.int (high - low + 1)
 
+(**
+   Wind_particle.respawn_particles_at_left ()
+
+   When a particle hits the right side of the map, it respawns it on the left
+   side (this function assumes the wind is going left to right, from the left
+   to the right of the map). The new y coordinates is a random int between the
+   floats defining the y area of the wind.
+ *)
 let respawn_particles_at_left () =
   let particles = (Global.get ()).particles in
   List.iter
@@ -27,6 +43,12 @@ let respawn_particles_at_left () =
         p#position#set Vector.{ x = 24.; y })
     particles
 
+(**
+   Wind_particle.create ()
+
+   Creates the set of particles being transported by the wind. It registers it
+   to the wind/draw system.
+ *)
 let create () =
   Random.self_init ();
   let particles = List.init 5

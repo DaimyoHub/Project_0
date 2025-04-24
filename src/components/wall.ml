@@ -2,6 +2,11 @@ open Component_defs
 open System_defs
 open Tag
 
+(**
+   Wall.wall (x, y, txt, width, height, horiz)
+
+   Creates a wall with the given caracteristics.
+ *)
 let wall (x, y, txt, width, height, horiz) =
   let e = new wall () in
   e#texture#set txt;
@@ -14,6 +19,11 @@ let wall (x, y, txt, width, height, horiz) =
   Collide_system.(register (e :> t));
   e
 
+(**
+   Wall.create ()
+
+   Generates walls of the game.
+ *)
 let create () = 
   List.map wall
     Cst.[ 
