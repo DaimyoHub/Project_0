@@ -25,16 +25,16 @@ let create (idx, name, x, y, width, height) =
     match t#tag#get with
     | HWall w -> (
         (if w#position#get.y <> 0. then
-          e#position#set (Vector.sub e#position#get Cst.j1_v_down)
+          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_down else Cst.j2_v_down))
         else
-          e#position#set (Vector.sub e#position#get Cst.j1_v_up)
+          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_up else Cst.j2_v_up))
         );
         e#velocity#set Vector.zero)
     | VWall (_, w) -> (
         (if w#position#get.x <> 0. then
-          e#position#set (Vector.sub e#position#get Cst.j1_v_right)
+          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_right else Cst.j2_v_right))
         else
-          e#position#set (Vector.sub e#position#get Cst.j1_v_left)
+          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_left else Cst.j2_v_left))
         );
         e#velocity#set Vector.zero)
     | Mappix pix -> (
@@ -125,6 +125,11 @@ let create (idx, name, x, y, width, height) =
                   posY>0. && posY<(float_of_int Cst.window_height)-.24.) then
                     e#position#set new_pos
           | None -> ())
+    | Bullet b -> 
+      (
+        e#losePv (b#getDmg);
+        (* Gfx.debug "%s Losing pv : %i remaining \n%!" e#name e#getPv *)
+      )
     | _ -> ());
 
   Draw_system.(register (e :> t));
@@ -285,6 +290,28 @@ let set_focused_map_pixel () =
   set_focused_pixel_texture (player1 ());
   set_focused_pixel_texture (player2 ())
 
+
+let handle_death () =
+  let inner player =
+    if player#getPv <=0 then
+      (
+        Gfx.debug "%s is dead\n%!" player#name;
+
+        player#setPv 1;
+
+        player#kill_player;
+
+        player#position#set (Vector.zero);
+        Draw_system.(unregister (player :> t));
+        Collide_system.(unregister (player :> t));
+        Move_system.(unregister (player :> t));
+        Wind_system.(unregister (player :> t));
+        true
+      )
+    else false
+  in
+  (inner (player1 ()),inner (player2 ()))
+
 (**
    Player.handle_jump_animation ()
 
@@ -295,11 +322,10 @@ let handle_jump_animation () =
   let inner player =
     if player#is_jumping then
       if player#get_jumping_anim_counter < 60 then (
-        (if player#get_jumping_anim_counter = 20 then
+        (if player#get_jumping_anim_counter < 40 then
           set_texture player (compute_texture player 1)
-        else if player#get_jumping_anim_counter = 40 then
+        else if player#get_jumping_anim_counter < 55 then
           set_texture player (compute_texture player 2));
-
         player#incr_jumping_anim_counter)
       else (
         player#reinit_jumping_anim_counter;
@@ -318,10 +344,9 @@ let handle_jump_animation () =
  *)
 let handle_shooting () =
   let inner player =
-    if player#get_shooting_counter < player#get_max_atk_speed then player#incr_shooting_counter
+    if (player#get_shooting_counter !=0 && player#get_shooting_counter < player#get_max_atk_speed) then player#incr_shooting_counter
     else player#reinit_shooting_counter
   in
 
   inner (player1 ());
   inner (player2 ())
-

@@ -25,3 +25,5 @@ val get_game_state : unit -> State.t
 
 val get : unit -> t
 val set : t -> unit
+
+val kill_counter : int ref

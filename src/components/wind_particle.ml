@@ -40,9 +40,28 @@ let respawn_particles_at_left () =
     (fun p ->
       let Vector.{ x; _ } = p#position#get in
       if x >= 750. then
-        let y_area, _ = Wind.compute_wind_area 0 in
+        let y_area, _ = Wind.compute_wind_area 0. in
         let y = float_of_int (random_int_between y_area) in
         p#position#set Vector.{ x = 24.; y })
+    particles
+
+(**
+   Wind_particle.respawn_particles_at_right ()
+
+   When a particle hits the right side of the map, it respawns it on the left
+   side (this function assumes the wind is going left to right, from the left
+   to the right of the map). The new y coordinates is a random int between the
+   floats defining the y area of the wind.
+ *)
+let respawn_particles_at_right () =
+  let particles = (Global.get ()).particles in
+  List.iter
+    (fun p ->
+      let Vector.{ x; _ } = p#position#get in
+      if x <= 26. then
+        let y_area, _ = Wind.compute_wind_area 0. in
+        let y = float_of_int (random_int_between y_area) in
+        p#position#set Vector.{ x = (float_of_int Cst.window_width)-.55.; y })
     particles
 
 (**
@@ -53,11 +72,11 @@ let respawn_particles_at_left () =
  *)
 let create () =
   Random.self_init ();
-  let particles = List.init 5
+  let particles = List.init 12
     (fun _ ->
       let p = new particle () in
 
-      let y_area, x_area = Wind.compute_wind_area 0 in
+      let y_area, x_area = Wind.compute_wind_area 0. in
       let x = float_of_int (random_int_between x_area)
       and y = float_of_int (random_int_between y_area) in
       p#position#set Vector.{ x; y };

@@ -7,6 +7,7 @@ let unset_key s = Hashtbl.remove key_table s
 
 let action_table = Hashtbl.create 16
 let register key action = Hashtbl.replace action_table key action
+let unregister key = Hashtbl.remove action_table key
 
 let handle_input () =
   let () =
@@ -90,14 +91,14 @@ let () =
   register "e" (fun () ->
     let p1 = Player.player1 () in
     if p1#can_shoot then begin
-      Bullet.create p1;
+      Bullet.create p1 p1#getDmgPerBullet;
       p1#incr_shooting_counter
     end);
 
   register "o" (fun () ->
     let p2 = Player.player2 () in
     if p2#can_shoot then begin
-      Bullet.create p2;
+      Bullet.create p2 p2#getDmgPerBullet;
       p2#incr_shooting_counter
     end);
 

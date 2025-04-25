@@ -34,3 +34,5 @@ let set_game_state game_state =
   let context = get () in context.state <- game_state
 
 let set s = state := Some s
+
+let kill_counter = ref 0

@@ -97,6 +97,20 @@ class player name =
     val mutable jumping_anim_counter = 0
     val mutable shooting_counter = 0
     val mutable atk_speed = 100
+    val mutable pv = 20
+    val mutable dmgPerBullet = 5
+    val mutable regenHp = 0
+
+    val mutable is_dead = false;
+
+    method kill_player = is_dead <- true
+    method is_dead = is_dead
+    
+    method getDmgPerBullet = dmgPerBullet
+    method getPv = pv
+
+    method setPv amount = pv <- pv + amount
+    method losePv amount = pv <- pv - amount
 
     method is_jumping = jumping_anim_counter <> 0
     method can_shoot = shooting_counter = 0
@@ -157,6 +171,37 @@ class wall () =
     inherit z_position ()
   end
 
+class mobTerrestre () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit velocity ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit resolver ()
+    inherit z_position ()
+
+    val mutable atk_speed = 100
+    val mutable pv = 5
+    val mutable dmgPerBullet = 5
+    val mutable lastDmgWhenOnPlayer = Unix.gettimeofday ()
+
+    method handleDmgGetWhenMobOnPlayer = (
+      let curr_time = Unix.gettimeofday () in 
+      if (curr_time-.lastDmgWhenOnPlayer>3.) then (
+        lastDmgWhenOnPlayer <- curr_time;
+        dmgPerBullet
+      ) else 0
+    )
+
+    method getPv = pv
+    method setPv amount = pv <- pv + amount
+    method losePv amount = pv <- pv - amount
+    method getDmgPerBullet = dmgPerBullet
+  end
+
+
 class bullet () =
   object
     inherit Entity.t ()
@@ -167,6 +212,11 @@ class bullet () =
     inherit box ()
     inherit resolver ()
     inherit texture ()
+
+    val mutable dmg = 0
+
+    method defineDmg amount = dmg <- amount
+    method getDmg = dmg
   end
 
 class portal () =

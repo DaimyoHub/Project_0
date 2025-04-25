@@ -13,3 +13,5 @@ type tag += HWall of wall | VWall of int * wall
 type tag += Particle
 
 type tag += Bullet of bullet
+
+type tag += MobTerrestre of mobTerrestre

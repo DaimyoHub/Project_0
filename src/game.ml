@@ -38,7 +38,37 @@ let update dt =
   Player.set_focused_map_pixel ();
   Player.handle_jump_animation ();
   Player.handle_shooting ();
-  Wind_particle.respawn_particles_at_left ();
+  MobTerrestre.update_mobs_velocity_and_deaths ();
+  MobTerrestre.handle_mob_terrestre_creation dt;
+
+  let (p1_death, p2_death) = Player.handle_death () in 
+  if p1_death then 
+  (
+    Input.unregister "z";
+    Input.unregister "q";
+    Input.unregister "d";
+    Input.unregister "s";
+    Input.unregister "e";
+    Input.unregister "a";
+    Input.unregister "w"
+  );
+  if p2_death then 
+  (
+    Input.unregister "j";
+    Input.unregister "l";
+    Input.unregister "k";
+    Input.unregister "i";
+    Input.unregister "n";
+    Input.unregister "o";
+    Input.unregister "u"
+  ); 
+
+  let reversed = (mod_float dt Cst.wind_timing_swap)>=(Cst.wind_timing_swap/.2.) in
+  (if (reversed) then
+    Wind_particle.respawn_particles_at_left ()
+  else
+    Wind_particle.respawn_particles_at_right ()
+  );
 
   let _ = 
     match Global.get_game_state () with

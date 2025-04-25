@@ -17,6 +17,11 @@ let j1_v_down = Vector.sub Vector.zero j1_v_up
 let j1_v_left = Vector.{ x = -2.0; y = 0.0 }
 let j1_v_right = Vector.sub Vector.zero j1_v_left
 
+let mobTerr_v_up = Vector.{ x = 0.0; y = -1.0 }
+let mobTerr_v_down = Vector.sub Vector.zero j1_v_up
+let mobTerr_v_left = Vector.{ x = -1.0; y = 0.0 }
+let mobTerr_v_right = Vector.sub Vector.zero j1_v_left
+
 let j2_v_up = Vector.{ x = 0.0; y = -2.0 }
 let j2_v_down = Vector.sub Vector.zero j2_v_up
 let j2_v_left = Vector.{ x = -2.0; y = 0.0 }
@@ -55,3 +60,12 @@ let exit_height = 35
 
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"
 let font_color = Gfx.color 0 0 0 255
+
+let wind_timing_swap = 10000.
+
+let mobTerrestreHeight = 18
+let mobTerrestreWidth = 18
+
+let mobTerrestreVelocity = Vector.zero
+
+let mob_spawn_timer = 5000.
