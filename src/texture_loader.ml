@@ -67,6 +67,10 @@ let prepare_texture_handler texture_handler images =
       else if n = "player_2_top_jump_1"      then Player_2_top_jump_1
       else if n = "wind_particle"            then Wind_particle
       else if n = "portal"                   then Portal
+      else if n = "mob_bottom"               then Mob_bottom
+      else if n = "mob_top"                  then Mob_top
+      else if n = "mob_right"                then Mob_right
+      else if n = "mob_left"                 then Mob_left
       else (* n = "map_pixel_wall_3" then *)      Wall_3
     in
     Hashtbl.add texture_handler texture_kind i

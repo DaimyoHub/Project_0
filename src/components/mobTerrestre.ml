@@ -48,7 +48,7 @@ let create x y dt =
         ) 
       )
     | Bullet b -> (
-        e#losePv (b#getDmg)
+        if (b#is_sent_by_player) then e#losePv (b#getDmg)
       )
     | Player (_, p) -> (
       let amount = e#handleDmgGetWhenMobOnPlayer in
@@ -82,22 +82,28 @@ let handle_mob_terrestre_creation dt =
     let _ = create x y dt in ()
   )
 
-
-let update_mobs_velocity_and_deaths () =
+let set_texture mob texture =
+  let texture_handler = (Global.get ()).texture_handler in
+  let texture = Option.value
+    (Hashtbl.find_opt texture_handler texture)
+    ~default: Texture.Raw.green
+  in
+  mob#texture#set texture
+  
+(* velocity / shooting / deaths *)
+let update_mobs_turn () =
   let to_remove = ref [] in
-  Hashtbl.iter (fun id mob ->
+  Hashtbl.iter (fun id (mob : Component_defs.mobTerrestre) ->
     if mob#getPv <= 0 then (
+      (* Handles deaths *)
       to_remove := id :: !to_remove
     ) else (
       (* Update velocity : chaque mob se dirige vers le joueur le plus proche *)
-      
       let glob = Global.get () in
       let open Vector in      
       
       let player1 = glob.player1 in 
       let player2 = glob.player2 in
-
-      (* Gfx.debug "%i %i \n%!" player1#getPv player2#getPv; *)
 
       if (player1#is_dead) then (
         let player2_pos = player2#position#get in 
@@ -129,7 +135,26 @@ let update_mobs_velocity_and_deaths () =
         let norma_vect = normalize new_vect in
         let new_velocity = mult 1.0 norma_vect in
 
-        mob#velocity#set new_velocity
+        mob#velocity#set new_velocity;
+      );
+
+      if (mob#is_the_mob_shooting) then (
+        Bullet.mob_create mob mob#getDmgPerBullet
+      );
+
+      let x = mob#velocity#get.x in 
+      let y = mob#velocity#get.y in
+
+      if abs_float x > abs_float y then (
+        if x > 0. then
+          set_texture mob Mob_right
+        else
+          set_texture mob Mob_left
+      ) else (
+        if y > 0. then
+          set_texture mob Mob_bottom
+        else
+          set_texture mob Mob_top
       )
     )
   ) all_mobs;

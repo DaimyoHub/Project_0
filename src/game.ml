@@ -38,7 +38,7 @@ let update dt =
   Player.set_focused_map_pixel ();
   Player.handle_jump_animation ();
   Player.handle_shooting ();
-  MobTerrestre.update_mobs_velocity_and_deaths ();
+  MobTerrestre.update_mobs_turn ();
   MobTerrestre.handle_mob_terrestre_creation dt;
 
   let (p1_death, p2_death) = Player.handle_death () in 
@@ -109,7 +109,7 @@ let run () =
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
 
-  let tile_set_r = Gfx.load_file "resources/files/tile_set.txt" in
+  let tile_set_r = Gfx.load_file "/resources/files/tile_set.txt" in
   Gfx.main_loop
     (fun _ -> Gfx.get_resource_opt tile_set_r)
     (fun tile_set -> 

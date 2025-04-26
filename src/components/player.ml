@@ -127,8 +127,9 @@ let create (idx, name, x, y, width, height) =
           | None -> ())
     | Bullet b -> 
       (
-        e#losePv (b#getDmg);
-        (* Gfx.debug "%s Losing pv : %i remaining \n%!" e#name e#getPv *)
+        if (not b#is_sent_by_player) then
+          e#losePv (b#getDmg);
+          (* Gfx.debug "%s Losing pv : %i remaining \n%!" e#name e#getPv *)
       )
     | _ -> ());
 

@@ -57,3 +57,8 @@ type kind =
   | Portal
   | Wind_particle
   | Bullet
+  (* mob texture *)
+  | Mob_bottom
+  | Mob_top
+  | Mob_right
+  | Mob_left

@@ -5,6 +5,11 @@ map_pixel_wall_2.png
 map_pixel_wall_3.png
 map_pixel_ground.png
 
+mob_bottom.png
+mob_top.png
+mob_right.png
+mob_left.png
+
 player_1_left.png
 player_1_right.png
 player_1_bottom.png

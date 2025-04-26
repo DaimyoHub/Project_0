@@ -187,6 +187,8 @@ class mobTerrestre () =
     val mutable dmgPerBullet = 5
     val mutable lastDmgWhenOnPlayer = Unix.gettimeofday ()
 
+    val mutable lastShootTiming = Unix.gettimeofday ()
+
     method handleDmgGetWhenMobOnPlayer = (
       let curr_time = Unix.gettimeofday () in 
       if (curr_time-.lastDmgWhenOnPlayer>3.) then (
@@ -199,6 +201,14 @@ class mobTerrestre () =
     method setPv amount = pv <- pv + amount
     method losePv amount = pv <- pv - amount
     method getDmgPerBullet = dmgPerBullet
+
+    method is_the_mob_shooting = (
+      let curr_time = Unix.gettimeofday () in 
+      if (curr_time-.lastShootTiming>3.) then (
+        lastShootTiming <- curr_time;
+        true
+      ) else false
+    )
   end
 
 
@@ -213,7 +223,12 @@ class bullet () =
     inherit resolver ()
     inherit texture ()
 
+    val mutable sent_from_player = true
+
     val mutable dmg = 0
+
+    method is_sent_by_player = sent_from_player
+    method created_by_mob = sent_from_player <- false
 
     method defineDmg amount = dmg <- amount
     method getDmg = dmg
