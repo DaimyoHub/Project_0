@@ -14,13 +14,10 @@ player_1_left.png
 player_1_right.png
 player_1_bottom.png
 player_1_top.png
-
 player_2_left.png
 player_2_right.png
 player_2_bottom.png
 player_2_top.png
-
-portal.png
 
 player_1_right_jump_0.png
 player_1_right_jump_1.png
@@ -38,5 +35,24 @@ player_1_top_jump_0.png
 player_1_top_jump_1.png
 player_2_top_jump_0.png
 player_2_top_jump_1.png
+
+player_1_right_melee_0.png
+player_1_right_melee_1.png
+player_2_right_melee_0.png
+player_2_right_melee_1.png
+player_1_left_melee_0.png
+player_1_left_melee_1.png
+player_2_left_melee_0.png
+player_2_left_melee_1.png
+player_1_bottom_melee_0.png
+player_1_bottom_melee_1.png
+player_2_bottom_melee_0.png
+player_2_bottom_melee_1.png
+player_1_top_melee_0.png
+player_1_top_melee_1.png
+player_2_top_melee_0.png
+player_2_top_melee_1.png
+
+portal.png
 
 wind_particle.png

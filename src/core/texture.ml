@@ -54,6 +54,22 @@ type kind =
   | Player_1_top_jump_1
   | Player_2_top_jump_0
   | Player_2_top_jump_1
+  | Player_1_right_melee_0
+  | Player_1_right_melee_1
+  | Player_2_right_melee_0
+  | Player_2_right_melee_1
+  | Player_1_left_melee_0
+  | Player_1_left_melee_1
+  | Player_2_left_melee_0
+  | Player_2_left_melee_1
+  | Player_1_bottom_melee_0
+  | Player_1_bottom_melee_1
+  | Player_2_bottom_melee_0
+  | Player_2_bottom_melee_1
+  | Player_1_top_melee_0
+  | Player_1_top_melee_1
+  | Player_2_top_melee_0
+  | Player_2_top_melee_1
   | Portal
   | Wind_particle
   | Bullet

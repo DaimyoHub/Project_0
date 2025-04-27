@@ -112,6 +112,17 @@ class player name =
     val mutable is_dead = false
     val mutable is_resurrected = false
 
+    val mutable melee_counter = 0
+
+    method is_melee_triggered = melee_counter <> 0
+  
+    method get_melee_counter = melee_counter
+
+    method reinit_melee_counter = melee_counter <- 0
+
+    method incr_melee_counter =
+      melee_counter <- melee_counter + 1 
+
     method is_p_resurrected = is_resurrected
     method resurrect = is_resurrected <- true; pv <- 1 
     method resurection_completed = (is_resurrected <- false; is_dead <- false)

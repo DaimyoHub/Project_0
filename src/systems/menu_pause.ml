@@ -28,10 +28,14 @@ let update _dt el =
     let lines = [
       player#name ^ " (HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv ^ ")") else " DEAD)");
       "";
-      "Movement: " ^ (if is_first_player then "'z' 'q' 's' 'd'" else "'i' 'j' 'k' 'l'");
-      "Jump: " ^ (if is_first_player then "'a'" else "'u'");
-      "Create a Portal: " ^ (if is_first_player then "'w'" else "'n'");
-      "Shoot: " ^ (if is_first_player then "'e'" else "'o'");
+      "";
+      "HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv) else "Dead");
+      "";
+      "Movement: " ^ (if is_first_player then "z q s d" else "i j k l");
+      "Jump: " ^ (if is_first_player then "a" else "u");
+      "Create a Portal: " ^ (if is_first_player then "w" else "n");
+      "Shoot: " ^ (if is_first_player then "e" else "o");
+      "Melee: " ^ (if is_first_player then "x" else ",");
     ] in
     List.iteri (fun i line ->
       let text_surface = Gfx.render_text ctx line font in
