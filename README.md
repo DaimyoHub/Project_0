@@ -20,6 +20,7 @@
     - Se déplacer et sauter :
       *Les déplacements peuvent être contraints et modifiés par la présence de vent sur certaines parties de la carte*
     - Tirer des projectiles
+    - Frapper les adversaires
     - Poser un portail : 
       *chaque joueur est en mesure de poser une sortie de téléporteur, mais ces derniers ne sont actifs que lorsque les deux joueurs en ont créés, afin de pouvoir se téléporter d'un bout à l'autre*
     - Tirer à travers un portail :
@@ -82,8 +83,8 @@
 - **Sauts des joueurs :**
     - Le saut d'un joueur nécessite de travailler sur deux axes : la hauteur du
     joueur, et l'animation du joueur. Lorsqu'un joueur saute, sa z_position est 
-    augmentée de 1 durant un certain temps. Pour l'animation du joueur, sont 
-    saut est divisée en deux phases : la première affiche une certaine texture,
+    augmentée de 1 durant un certain temps. Pour l'animation du joueur, son 
+    saut est divisé en deux phases : la première affiche une certaine texture,
     puis la seconde affiche une autre texture.
 
     - Pour pouvoir calculer la bonne texture à afficher, le système d'animation 
@@ -94,8 +95,9 @@
 
     - Nous avons fait le choix de ne pas rendre le système d'animation générique
     à cause des contraintes de temps sur le rendu et parce qu'il n'aurait été 
-    utilisé que pour le saut des joueurs. Cependant, l'algorithme implémenté est
-    n'est pas complexe et est réutilisable dans le cadre de notre jeu vidéo.
+    utilisé que pour le saut des joueurs et les attaques au corps à corps. Cependant,
+    l'algorithme implémenté n'est pas complexe et est réutilisable dans le cadre de
+    notre jeu vidéo.
 
     - Voir le design du système de chargement et d'utilisation de textures pour
     plus d'informations.
@@ -109,22 +111,40 @@
     est au sol. Le second bloc devant lui est plus foncé que les autres blocs,
     il correspond à l'endroit ou le portail peut être posé. Le joueur pose alors
     le portail. Si l'autre joueur a aussi posé son portail et que l'un des deux
-    tente de passer au dessus, il sera téléporté vers l'autre portail. Il en va de même si un projectile tiré par un joueur passe à travers un portail.
+    tente de passer au dessus, il sera téléporté vers l'autre portail. Il en va de
+    même si un projectile tiré par un joueur passe à travers un portail.
 
     - Le portail est une entité dont les composantes de forme sont copiées collées
     sur celles du bloc sur lequel il se trouve. La téléportation se fait dans la
     fonction resolve du système de collisions. Lorsqu'un joueur est téléporté, 
     nous avons fait en sorte que le sens du joueur soit conservé par la téléportation.
-    S'il rentre à gauche, il ressortira à droite. Les cas limites sont également pris en compte : Si un joueur se téléporte vers une zone invalide (un mur), il n'est pas téléporté, ou du moins il ne bug pas dans un mur
+    S'il rentre à gauche, il ressortira à droite. Les cas limites sont également pris
+    en compte : Si un joueur se téléporte vers une zone invalide (un mur), il n'est
+    pas téléporté, ou du moins il ne bug pas dans un mur
 
     - Si un joueur a déjà posé son portail, il peut le déplacer autre part. 
     La composante position du portail déplacé est alors mise à jour et correspond
     nouvel endroit.
 
 - **Tire de munitions :**
-    - Le jeu permet de tirer des munitions de différentes tailles (infiniment grandes), différenciées par l'origine du tireur (allié vs ennemi, représenté par la couleur jaune vs violette) : une entité ne peut pas infliger de dégâts à un coéquipier.
+    - Le jeu permet de tirer des munitions de différentes tailles (infiniment grandes),
+      différenciées par l'origine du tireur (allié vs ennemi, représenté par la
+      couleur jaune vs violette) : une entité ne peut pas infliger de dégâts à un
+      coéquipier.
     
-    - Une munition est représentée par une entité simple qui disparait à la première collision, en réalisant une action suivant l'entité à laquelle elle est entrée en collision (Portail, joueur, ennemi)
+    - Une munition est représentée par une entité simple qui disparait à la première
+      collision, en réalisant une action suivant l'entité à laquelle elle est entrée
+      en collision (portail, joueur, ennemi)
+
+- **Attaque de mélée/corps à corps :**
+    - Le joueur est un personnage fort, musclé, puissant et dangereux. Il peut frapper
+      les ennemis en corps à corps. Cette attaque implique l'utilisation d'un algo
+      permettant d'animer le joueur, parfaitement analogue à l'algo utilisé pour animer
+      un saut.
+
+    - Lorsqu'un joueur tente d'attaquer au corps à corps, s'il est en collision avec
+      un adversaire, celui-ci subit des dégats (deux fois moins que s'il le touchait
+      avec une munition).
 
 ### Fonctionnalités essentielles
 
@@ -155,20 +175,82 @@
     performances du jeu, mais ça aurait été un bon exercice d'optimisation...
 
 - **Fonctionnement des augmentations**
-    - Les améliorations/augments sont un système majeur du jeu, étant donné qu'il offre la rejouabilité et le fun dont un jeu de ce type a besoin, nous sommes d'ailleurs fier de ce que ce système fourni en terme de différences de gameplay d'une partie à l'autre. 
+    - Les améliorations/augments sont un système majeur du jeu, étant donné qu'il
+      offre la rejouabilité et le fun dont un jeu de ce type a besoin, nous sommes
+      d'ailleurs fier de ce que ce système fourni en terme de différences de gameplay
+      d'une partie à l'autre. 
 
-    - Les augments sont représentés par un type énuméré modulable très facilement afin d'en rajouter d'autres aisément. Lorsque les joueurs choisissent un augment, une fonction permet d'appliquer les effets du bonus aux deux joueurs, en modifiant leurs statistiques.
+    - Les augments sont représentés par un type énuméré modulable très facilement
+      afin d'en rajouter d'autres aisément. Lorsque les joueurs choisissent un augment,
+      une fonction permet d'appliquer les effets du bonus aux deux joueurs, en modifiant
+      leurs statistiques.
     
-    - Ainsi, tous les fichiers ont du être modifiés de façon à ce que ces modifications soient prises en compte dans le déroulement des mouvements, des résolution d'impacts de balles, etc...
+    - Ainsi, tous les fichiers ont du être modifiés de façon à ce que ces
+      modifications soient prises en compte dans le déroulement des mouvements, des
+      résolution d'impacts de balles, etc...
+      
 - **Fonctionnement des ennemis**
-    - Les ennemies sont la raison d'être du jeu, dans le sens où le jeu n'aurait aucun intérêt sans
+    - Les ennemies sont la raison d'être du jeu, dans le sens où le jeu n'aurait aucun
+      intérêt sans.
 
-    - Un monstre est invoqué sur les bords de la carte (emplacement aléatoire) toutes les 6 secondes.
+    - Un monstre est invoqué sur les bords de la carte (emplacement aléatoire) toutes
+      les 6 secondes.
 
-    - Pour des raisons de performance, les ennemis ne peuvent être que 5 maximums sur le terrain à la fois, cependant les joueurs font moins d'éliminations totales et choisissent moins d'augments si ils empêchent les ennemis de spawn, ce qui rend cette décision acceptable.
+    - Pour des raisons de performance, les ennemis ne peuvent être que 5 maximums
+      sur le terrain à la fois, cependant les joueurs font moins d'éliminations
+      totales et choisissent moins d'augments si ils empêchent les ennemis de spawn,
+      ce qui rend cette décision acceptable.
     
-    - Toutes les 5 invocations, les prochains ennemis voient leurs statistiques améliorées (de la même façon que les joueurs peuvent améliorer leur propres statistiques et compétences) : la durée de la partie étant de 1 minute, les ennemis s'améliorent 5 à 6 fois par partie
+    - Toutes les 5 invocations, les prochains ennemis voient leurs statistiques améliorées
+      (de la même façon que les joueurs peuvent améliorer leur propres statistiques et
+      compétences) : la durée de la partie étant de 1 minute, les ennemis s'améliorent 5
+      à 6 fois par partie
 
-    - Le but premier des ennemis étant de tuer les joueurs, ils analysent à chaque étape de jeu quel est le joueur le plus proche, afin de calculer leur nouvelle direction, et vers où ils vont tirer.
+    - Le but premier des ennemis étant de tuer les joueurs, ils analysent à chaque étape
+      de jeu quel est le joueur le plus proche, afin de calculer leur nouvelle direction,
+      et vers où ils vont tirer.
     
-    - Si un ennemi arrive sur un joueur et rentre en collision avec lui, il lui infligera des dégâts périodiquement (toutes les 2 ou 3 secondes), forçant le joueur à fuir ou se mettre en hauteur sur des rochers.
+    - Si un ennemi arrive sur un joueur et rentre en collision avec lui, il lui infligera
+      des dégâts périodiquement (toutes les 2 ou 3 secondes), forçant le joueur à fuir
+      ou se mettre en hauteur sur des rochers.
+
+### Fonctionnalités internes
+
+- **Chargement des textures :**
+    - Toutes les textures sont stockées dans le dossier
+      `resources/images/`. Elles sont référencées dans le fichier `resources/files/tile_set.txt`.
+      Dans le chargement du jeu, tous les fichiers référencés sont chargés puis stockés dans
+      une table associative : le gestionnaire de textures, de sorte qu'il soit simple de
+      électionner la texture voulue en utilisant une simple clé. Implémenté de cette manière,
+      il est aisé d'ajouter ou de retirer des textures au jeu. Un ajout se fait en ajoutant
+      l'entrée dans le gestionnaire de textures et en ajoutant l'image dans le tile set.
+
+    - L'extraction d'une texture est alors simple, elle se fait toujours avec la construction
+      suivante :
+
+      ```ocaml
+      let ma_texture = Option.value
+        (Hashtbl.find_opt (Global.get ()).texture_handler Texture.Cle)
+        ~default: Texture.Raw.CouleurParDefaut
+      in
+      ...
+      ```
+      
+- **Animations :**
+    - Deux actions sont animées dans le jeu : le saut des joueurs et l'attaque mélée des joueurs.
+
+    - L'algorithme est le même dans les deux cas : un attribut compteur est associé à chaque joueur
+      pour une animation précise. Lorsque l'animation est lancée, le compteur est mis à 1. Chaque
+      intervalle du compteur correspond à une phase de l'animation. Ainsi, la texture associée au
+      joueur dépend de l'avancée du compteur. Lorsque celui-ci atteint son max, la texture de base
+      est ré-associée au joueur.
+
+    - Les mouvements des joueurs ne se font que latéralement ou de haut en bas/bas en haut.
+      Pour chaque sens du joueur, nous avons donc du créer une texture correspondant à une certaine
+      phase de l'animation, dans un certain sens. (ça fait beaucoup...)
+
+- **Design artistique :**
+    - La colorimétrie est mauvaise, les textures sont mauvaises, les phases des animations aussi,
+      mais comme dirait Dalida "finalement, c'est un laid qui est beau, qui a du charme".
+  
+  
