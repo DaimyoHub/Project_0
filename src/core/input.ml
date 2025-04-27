@@ -114,3 +114,4 @@ let handle_input () =
 let () = 
   register_player true;
   register_player false
+

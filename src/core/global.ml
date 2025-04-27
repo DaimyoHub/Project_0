@@ -56,3 +56,7 @@ let chosen_option = ref None
 let current_augments = ref None
 
 let new_augment_to_select = ref false
+
+let game_time_start = ref (Unix.gettimeofday ())
+
+let start_pause_time = ref 0.

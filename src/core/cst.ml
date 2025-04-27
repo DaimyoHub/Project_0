@@ -70,6 +70,6 @@ let mobTerrestreVelocity = Vector.zero
 
 let mob_spawn_timer = 6000.
 
-let max_time = 180 (* length of the game in seconds *)
+let max_time = 15. (* length of the game in seconds *)
 
 let max_amount_of_mobs = 5

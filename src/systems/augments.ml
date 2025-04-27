@@ -129,5 +129,7 @@ let update _dt el =
 
       Global.chosen_option := None;
       Global.current_augments := None;
+      let pause_time = Unix.gettimeofday () -. !Global.start_pause_time in 
+      Global.game_time_start := !Global.game_time_start +. pause_time;
       Global.set_game_state Game;
     end

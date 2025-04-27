@@ -15,7 +15,7 @@ let update _dt el =
     Gfx.fill_rect ctx surface 0 290 Cst.window_width 70;
 
     Gfx.set_color ctx (Gfx.color 255 255 255 255);
-    let text_surface = Gfx.render_text ctx ("RIP, You died before the end of the " ^ string_of_int Cst.max_time ^ " seconds...") font in
+    let text_surface = Gfx.render_text ctx ("RIP, You died before the end of the " ^ string_of_float Cst.max_time ^ " seconds...") font in
     Gfx.blit ctx surface text_surface 30 300;
   
     Gfx.commit ctx
@@ -31,7 +31,7 @@ let update _dt el =
     Gfx.fill_rect ctx surface 0 290 Cst.window_width 70;
 
     Gfx.set_color ctx (Gfx.color 255 255 255 255);
-    let text_surface = Gfx.render_text ctx ("Congratulations ! You survived the "^(string_of_int Cst.max_time)^" seconds !!") font in
+    let text_surface = Gfx.render_text ctx ("Congratulations ! You survived the "^(string_of_float Cst.max_time)^" seconds !!") font in
     Gfx.blit ctx surface text_surface 30 300;
   
     Gfx.commit ctx

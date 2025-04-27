@@ -49,7 +49,9 @@ let update _dt el =
 
   let font = Gfx.load_font "ComicSansMS" "" 28 in
   Gfx.set_color ctx (Gfx.color 255 255 255 255);
-  let text_surface = Gfx.render_text ctx ("Time left : "^(string_of_int (Cst.max_time - int_of_float (_dt/.1000.)))) font in
+  let time_elapsed = (Unix.gettimeofday ()) -. (!Global.game_time_start) in
+  let time_int= int_of_float (time_elapsed) in
+  let text_surface = Gfx.render_text ctx ("Time left : " ^ (string_of_int ((int_of_float Cst.max_time)- time_int))) font in
   Gfx.blit ctx surface text_surface (Cst.window_width-220) 32;
 
   Gfx.commit ctx
