@@ -45,12 +45,6 @@ let update dt =
     Input.register_player false
   );
 
-  Player.set_focused_map_pixel ();
-  Player.handle_jump_animation ();
-  Player.handle_shooting ();
-  MobTerrestre.update_mobs_turn ();
-  MobTerrestre.handle_mob_terrestre_creation dt;
-
   let (p1_death, p2_death) = Player.handle_death () in 
   if p1_death then 
   (
@@ -73,26 +67,34 @@ let update dt =
     Input.unregister "u"
   ); 
 
-  let reversed = (mod_float dt Cst.wind_timing_swap)>=(Cst.wind_timing_swap/.2.) in
-  (if (reversed) then
-    Wind_particle.respawn_particles_at_left ()
-  else
-    Wind_particle.respawn_particles_at_right ()
-  );
-
   (* Check if this is the end of the game *)
   if ((Player.players_are_dead ())) then (
     Global.players_are_dead := true;
     Global.set_game_state End_screen
   );
-  if (Cst.max_time - int_of_float (dt/.1000.))<0 then (
-    Global.set_game_state End_screen
-  );
 
   let _ = 
     match Global.get_game_state () with
-    | Game -> begin
+    | Game -> begin      
+      if ((Unix.gettimeofday ()) -. !Global.game_time_start)>Cst.max_time then (
+        Global.set_game_state End_screen
+      );
+
+      Player.set_focused_map_pixel ();
+      Player.handle_jump_animation ();
+      Player.handle_shooting ();
+      MobTerrestre.update_mobs_turn ();
+      MobTerrestre.handle_mob_terrestre_creation dt;
+
+      let reversed = (mod_float dt Cst.wind_timing_swap)>=(Cst.wind_timing_swap/.2.) in
+      (if (reversed) then
+        Wind_particle.respawn_particles_at_left ()
+      else
+        Wind_particle.respawn_particles_at_right ()
+      );
+
       if (!Global.new_augment_to_select) then (
+        Global.start_pause_time := Unix.gettimeofday ();
         Input.register "v" (fun () ->
           Global.chosen_option := Some true
         );
@@ -120,6 +122,7 @@ let update dt =
       )
       end
     | Augments -> (
+
       Global.new_augment_to_select := false;
       Augments_system.update dt
     )
