@@ -250,7 +250,7 @@ class mobTerrestre () =
     )
 
     method getPv = pv
-    method setPv amount = pv <- pv + amount
+    method setPv amount = pv <- amount
     method losePv amount = pv <- pv - amount
     method getDmgPerBullet = dmgPerBullet
     method set_atk_speed amount = atk_speed <- amount

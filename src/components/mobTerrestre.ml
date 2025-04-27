@@ -60,7 +60,7 @@ let create x y dt =
     | _ -> ()
   );
 
-  e#setPv (5+2*ratio_amelioration);
+  e#setPv (4+3*ratio_amelioration);
   e#set_dmg (5+(3*ratio_amelioration));
   e#set_atk_speed (3.-.(0.2*.(float_of_int ratio_amelioration)));
 
