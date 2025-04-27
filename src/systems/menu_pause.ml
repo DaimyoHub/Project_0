@@ -35,6 +35,7 @@ let update _dt el =
       "Jump: " ^ (if is_first_player then "a" else "u");
       "Create a Portal: " ^ (if is_first_player then "w" else "n");
       "Shoot: " ^ (if is_first_player then "e" else "o");
+      "Melee: " ^ (if is_first_player then "x" else ",");
     ] in
     List.iteri (fun i line ->
       let text_surface = Gfx.render_text ctx line font in
