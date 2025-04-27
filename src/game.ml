@@ -33,7 +33,6 @@ let prepare_config window ctx texture_handler =
    updates every systems and particular aspects of some entities.
  *)
 let update dt =
-  Gfx.debug "%f \n%!" !Global.game_time_start;
   let () = Input.handle_input () in
 
   let (p1_resurrect, p2_resurrect) = Player.handle_ressurect () in 
@@ -134,7 +133,7 @@ let update dt =
     )
   in
 
-  if (!Global.restart_game) then 
+  if (!Global.restart_game) then (
     Augments_system.reset ();
     Collide_system.reset ();
     Draw_system.reset ();

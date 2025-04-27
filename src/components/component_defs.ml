@@ -184,7 +184,6 @@ class player name =
         atk_speed <- atk_speed - 4
       else if atk_speed>=60 then 
         atk_speed <- atk_speed - 1 
-      else Gfx.debug "Atk speed cap reached\n%!"
   end
 
 class map_pixel =

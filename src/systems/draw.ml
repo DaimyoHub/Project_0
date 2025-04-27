@@ -54,4 +54,7 @@ let update _ el =
   let text_surface = Gfx.render_text ctx ("Time left : " ^ (string_of_int ((int_of_float Cst.max_time)- time_int))) font in
   Gfx.blit ctx surface text_surface (Cst.window_width-220) 32;
 
+  let text_surface = Gfx.render_text ctx ("Press 'M' to open the Menu") font in
+  Gfx.blit ctx surface text_surface (180) (Cst.window_height-60);
+
   Gfx.commit ctx
