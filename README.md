@@ -2,6 +2,8 @@
 - POCQUET ALEXIS
 - PARENT YVAN
 
+![Image d'une partie en cours](https://github.com/DaimyoHub/Project_0/blob/master/game_example.png?raw=true)
+
 ## Propriétés générales
 
 - Arena shooter
