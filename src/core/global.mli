@@ -54,3 +54,7 @@ val game_time_start : float ref
 val start_pause_time : float ref
 
 val start_menu_pause_time : float option ref
+
+val restart_game : bool ref
+
+val reset_global_values : unit -> unit

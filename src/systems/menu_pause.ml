@@ -26,8 +26,7 @@ let update _dt el =
     Gfx.set_color ctx color;
     let is_first_player = player#name = "player1" in
     let lines = [
-      player#name^
-      " (HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv ^ ")") else " (Dead)");
+      player#name ^ " (HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv ^ ")") else " DEAD)");
       "";
       "Movement: " ^ (if is_first_player then "z q s d" else "i j k l");
       "Jump: " ^ (if is_first_player then "a" else "u");

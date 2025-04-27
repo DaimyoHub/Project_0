@@ -5,7 +5,7 @@ type t = drawable
 
 let init _ = ()
 
-let update _dt el =
+let update _ el =
   let Global.{window;ctx;_} = Global.get () in
   let surface = Gfx.get_surface window in
   let ww, wh = Gfx.get_context_logical_size ctx in

@@ -62,3 +62,20 @@ let game_time_start = ref (Unix.gettimeofday ())
 let start_pause_time = ref 0.
 
 let start_menu_pause_time = ref None
+
+let restart_game = ref false
+
+let first_menu_display = ref true
+
+let reset_global_values () = (
+  state := None;
+  kill_counter := 0;
+  players_are_dead := false;
+  chosen_option := None;
+  current_augments := None;
+  new_augment_to_select := false;
+  game_time_start := (Unix.gettimeofday ());
+  start_pause_time := 0.;
+  start_menu_pause_time := None;
+  restart_game := false
+)
