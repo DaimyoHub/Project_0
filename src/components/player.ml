@@ -235,12 +235,12 @@ let compute_jump_texture player jp =
         if is_one then Player_1_left_jump_1 else Player_2_left_jump_1
 
 (**
-   Player.compute_texture player jumping_phase
+   Player.compute_melee_texture player melee_phase
 
-   Computes the convenient texture of [player] according to the [jumping_phase]
+   Computes the convenient texture of [player] according to the [melee_phase]
    and the direction of [player]. The player can be preparing itself to jump
-   (phase 0) or can be jumping (phase 1, 2, 3). The computed texture is the
-   next texture that should be given to [player].
+   (phase 0) or can be jumping (phase 1, 2). The computed texture is the next
+   texture that should be given to [player].
  *)
 let compute_melee_texture player mp =
   let open Texture in
@@ -400,10 +400,10 @@ let handle_jump_animation () =
   inner (player2 ())
 
 (**
-   Player.handle_jump_animation ()
+   Player.handle_melee_animation ()
 
-   Handles the jumping animation of both players. It decides the phases of the
-   jumping animation and sets the dedicated texture thanks to compute_jump_texture.
+   Handles the melee animation of both players. It decides the phases of the
+   melee animation and sets the dedicated texture thanks to compute_melee_texture.
  *)
 let handle_melee_animation () =
   let inner player =
