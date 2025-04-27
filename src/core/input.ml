@@ -134,4 +134,7 @@ let () =
     Global.game_time_start := !Global.game_time_start +. pause_time;
     Global.start_menu_pause_time := None;
     Global.set_game_state State.Game)
-  );
+  ); 
+  register "r" (fun () ->
+    Global.restart_game := true
+  )

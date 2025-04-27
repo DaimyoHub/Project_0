@@ -129,7 +129,6 @@ let create (idx, name, x, y, width, height) =
       (
         if (not b#is_sent_by_player) then
           e#losePv (b#getDmg);
-          (* Gfx.debug "%s Losing pv : %i remaining \n%!" e#name e#getPv *)
       )
     | MobTerrestre mob ->
         if e#is_melee_triggered then mob#losePv e#getDmgPerBullet

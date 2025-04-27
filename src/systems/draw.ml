@@ -5,7 +5,7 @@ type t = drawable
 
 let init _ = ()
 
-let update _dt el =
+let update _ el =
   let Global.{window;ctx;_} = Global.get () in
   let surface = Gfx.get_surface window in
   let ww, wh = Gfx.get_context_logical_size ctx in
@@ -53,5 +53,8 @@ let update _dt el =
   let time_int= int_of_float (time_elapsed) in
   let text_surface = Gfx.render_text ctx ("Time left : " ^ (string_of_int ((int_of_float Cst.max_time)- time_int))) font in
   Gfx.blit ctx surface text_surface (Cst.window_width-220) 32;
+
+  let text_surface = Gfx.render_text ctx ("Press 'M' to open the Menu") font in
+  Gfx.blit ctx surface text_surface (180) (Cst.window_height-60);
 
   Gfx.commit ctx

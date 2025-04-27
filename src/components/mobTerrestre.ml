@@ -6,7 +6,11 @@ open Tag
 let all_mobs : (int, mobTerrestre) Hashtbl.t = Hashtbl.create 6
 let mob_id_counter = ref 1
 
-let create x y dt =
+let reset () =
+  mob_id_counter := 1;
+  Hashtbl.reset all_mobs
+
+let create x y _ =
   let open Tag in 
   let e = new mobTerrestre () in 
 

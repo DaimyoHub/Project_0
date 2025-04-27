@@ -125,7 +125,6 @@ let update dt =
       )
       end
     | Augments -> (
-
       Global.new_augment_to_select := false;
       Augments_system.update dt
     )
@@ -137,7 +136,19 @@ let update dt =
     )
   in
 
-  None
+  if (!Global.restart_game) then (
+    Augments_system.reset ();
+    Collide_system.reset ();
+    Draw_system.reset ();
+    End_screen.reset ();
+    Menu_pause.reset ();
+    Move_system.reset ();
+    Wind_system.reset ();
+    MobTerrestre.reset ();
+    Global.reset_global_values ();
+    Some ())
+  else
+    (None)
 
 (**
    Game.set_textures particles
@@ -166,16 +177,19 @@ let run () =
   let ctx = Gfx.get_context window in
 
   let tile_set_r = Gfx.load_file "/resources/files/tile_set.txt" in
-  Gfx.main_loop
-    (fun _ -> Gfx.get_resource_opt tile_set_r)
-    (fun tile_set -> 
-      let images_and_names = Texture_loader.parse_tile_set ctx tile_set in
-      Gfx.main_loop
-        (fun _ -> Texture_loader.get_resources images_and_names)
-        (fun images ->
-          let th = Hashtbl.create 10 in
-          Texture_loader.prepare_texture_handler th images;
-          prepare_config window ctx th;
-          set_textures ();
-          Gfx.main_loop update (fun () -> ())
-        ))
+  let rec main () = (
+    Gfx.main_loop
+      (fun _ -> Gfx.get_resource_opt tile_set_r)
+      (fun tile_set -> 
+        let images_and_names = Texture_loader.parse_tile_set ctx tile_set in
+        Gfx.main_loop
+          (fun _ -> Texture_loader.get_resources images_and_names)
+          (fun images ->
+            let th = Hashtbl.create 10 in
+            Texture_loader.prepare_texture_handler th images;
+            prepare_config window ctx th;
+            set_textures ();
+            Gfx.main_loop update (fun () -> main ())
+          ))
+  )
+  in main ()

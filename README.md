@@ -1,41 +1,53 @@
 # Projet Programmation Fonctionnelle Avancée
+- POCQUET ALEXIS
+- PARENT YVAN
 
 ## Propriétés générales
 
-- Rogue-like coop
-- Deux joueurs
-- Vue de face et **d'en haut** (à voir)
-
-## Résumé scénario
-
-Jones et Peter, deux apprentis magiciens, sont partis à l'aventure pour retrouver
-l'Arkenstone, un précieux artéfact découvert par le peuple des nains plusieurs
-centenaires auparavant. Il parcoureront les grandes mines de la Moria, combattront 
-Orques, Gobelins et tant de créatures qui vous n'oseriez imaginer. Les deux compagnons
-pourront-ils compter l'un sur l'autre dans cette quête pour l'Arkenstone.
+- Arena shooter
+- Roguelite (Selection d'augmentations au fur et à mesure pour personnaliser sa partie)
+- Deux joueurs en coopération
+- Vue d'en haut
 
 ## Gameplay
 
-Les différents étages des mines de la Moria sont généré aléatoirement. Chaque étage
-se finit par un boss aléatoire. Une fois battu, avant de passer à l'étage inférieur,
-les deux joueurs pourront choisir parmi un certain nombre d'améliorations existantes.
+- Le but du jeu est de réussir à survivre 1 minute sur la carte en ayant le plus d'éléminations d'ennemis que possible
 
-À la fin, les deux joueurs doivent combattre entre eux pour qu'il n'y ait qu'un
-survivant.
+- Les touches sont affichées en jeu, il suffit d'aller sur le Menu avec la touche 'm', toutes les touches y sont décrites, ainsi que les statistiques des joueurs sur la partie actuelle.
 
-Un étage est composé de plusieurs salles. Dans chaque salle, il faut résoudre un
-mini-défi et/ou faire face à des ennemis. Lorsque le travail est terminé dans une
-salle, une porte se révèle pour donner accès à une nouvelle salle.
-
-Lorsque le boss est tué, on passe à un étage inférieur.
-
-Un peu avant de combat fratricide, l'écran se sépare en deux car ils ne sont pas d'accord,
-chaque joueur doit descendre individuellement et ceux-ci se rejoignent finalement
-dans la salle du combat PVP.
+- Deux personnages sont controlables simultanément par deux personnes différentes jouant localement sur la même machine.
+- Les joueurs peuvent réaliser différentes actions simples mais cruciales : 
+    - Se déplacer et sauter :
+      *Les déplacements peuvent être contraints et modifiés par la présence de vent sur certaines parties de la carte*
+    - Tirer des projectiles
+    - Poser un portail : 
+      *chaque joueur est en mesure de poser une sortie de téléporteur, mais ces derniers ne sont actifs que lorsque les deux joueurs en ont créés, afin de pouvoir se téléporter d'un bout à l'autre*
+    - Tirer à travers un portail :
+      *Si un portail est actif, les joueurs peuvent tirer à travers les portails afin que les projectiles se téléportent sur l'autre sortie*
+- Périodiquement, des ennemis apparaissent sur la carte :
+    - Leur but est de tuer les joueurs
+    - Ils se dirigent en permanence vers le joueur le plus proche
+    - Ils tirent périodiquement des projectiles en direction des joueurs
+    - Les ennemis deviennent de plus en plus puissants de manière passive au fur et à mesure de la partie
+- Chaque fois qu'un ennemi est vaincu, les joueurs peuvent choisir un bonus :
+    - Les bonus sont partagés par les deux joueurs
+    - Il existe 10 différentes améliorations possibles :
+        - Des points de vie max supplémentaires sont accordés
+        - Les joueurs régénèrent des points de vies
+        - Un bouclier est accordé, annulant la prochaine source de dégâts
+        - La vitesse d'attaque des joueurs est augmentée
+        - La vitesse des projectiles envoyés par les joueurs est augmentée
+        - Les joueurs ont leur vitesse de déplacement augmentée
+        - Les joueurs infligent plus de dégâts
+        - Les joueurs gagnent un stack d'armure, réduisant tous les dégâts subis jusqu'à la fin de la partie par le nombre d'armures acquises
+        - La taille des projectiles est aggrandie
+        - Si l'un des joueurs est mort, il est possible de le réanimer avec 1 point de vie (avec pour contrainte qu'il est impossible de choisir un autre bonus à la place)
+    - A chaque élimination, deux améliorations parmis toutes celles existantes sont proposées
+    - Toutes ces améliorations continuent d'être proposées même si elles ont déjà été choisies. Il est donc par exemple possible de seulement choisir des boosts de vitesse si ils sont proposés, ou de seulement choisir d'augmenter la taille de ses projectiles jusqu'à ce qu'ils deviennent énormes.
 
 ## Fonctionnalités implémentées
 
-### Fonctionnélités orientées physique
+### Fonctionnalités orientées physique
 
 - **Wind system :**
     - Le système simule une courant d'air latéral puissant sur tout le terrain.
@@ -97,22 +109,22 @@ dans la salle du combat PVP.
     est au sol. Le second bloc devant lui est plus foncé que les autres blocs,
     il correspond à l'endroit ou le portail peut être posé. Le joueur pose alors
     le portail. Si l'autre joueur a aussi posé son portail et que l'un des deux
-    tente de passer au dessus, il sera téléporté vers l'autre portail.
+    tente de passer au dessus, il sera téléporté vers l'autre portail. Il en va de même si un projectile tiré par un joueur passe à travers un portail.
 
     - Le portail est une entité dont les composantes de forme sont copiées collées
     sur celles du bloc sur lequel il se trouve. La téléportation se fait dans la
     fonction resolve du système de collisions. Lorsqu'un joueur est téléporté, 
     nous avons fait en sorte que le sens du joueur soit conservé par la téléportation.
-    S'il rentre à gauche, il ressortira à droite.
+    S'il rentre à gauche, il ressortira à droite. Les cas limites sont également pris en compte : Si un joueur se téléporte vers une zone invalide (un mur), il n'est pas téléporté, ou du moins il ne bug pas dans un mur
 
     - Si un joueur a déjà posé son portail, il peut le déplacer autre part. 
     La composante position du portail déplacé est alors mise à jour et correspond
     nouvel endroit.
 
 - **Tire de munitions :**
-    - **TODO**
-
-- **Autre ?**
+    - Le jeu permet de tirer des munitions de différentes tailles (infiniment grandes), différenciées par l'origine du tireur (allié vs ennemi, représenté par la couleur jaune vs violette) : une entité ne peut pas infliger de dégâts à un coéquipier.
+    
+    - Une munition est représentée par une entité simple qui disparait à la première collision, en réalisant une action suivant l'entité à laquelle elle est entrée en collision (Portail, joueur, ennemi)
 
 ### Fonctionnalités essentielles
 
@@ -142,3 +154,21 @@ dans la salle du combat PVP.
     trop itérer dessus. À notre niveau, cela n'affecte probablement pas les
     performances du jeu, mais ça aurait été un bon exercice d'optimisation...
 
+- **Fonctionnement des augmentations**
+    - Les améliorations/augments sont un système majeur du jeu, étant donné qu'il offre la rejouabilité et le fun dont un jeu de ce type a besoin, nous sommes d'ailleurs fier de ce que ce système fourni en terme de différences de gameplay d'une partie à l'autre. 
+
+    - Les augments sont représentés par un type énuméré modulable très facilement afin d'en rajouter d'autres aisément. Lorsque les joueurs choisissent un augment, une fonction permet d'appliquer les effets du bonus aux deux joueurs, en modifiant leurs statistiques.
+    
+    - Ainsi, tous les fichiers ont du être modifiés de façon à ce que ces modifications soient prises en compte dans le déroulement des mouvements, des résolution d'impacts de balles, etc...
+- **Fonctionnement des ennemis**
+    - Les ennemies sont la raison d'être du jeu, dans le sens où le jeu n'aurait aucun intérêt sans
+
+    - Un monstre est invoqué sur les bords de la carte (emplacement aléatoire) toutes les 6 secondes.
+
+    - Pour des raisons de performance, les ennemis ne peuvent être que 5 maximums sur le terrain à la fois, cependant les joueurs font moins d'éliminations totales et choisissent moins d'augments si ils empêchent les ennemis de spawn, ce qui rend cette décision acceptable.
+    
+    - Toutes les 5 invocations, les prochains ennemis voient leurs statistiques améliorées (de la même façon que les joueurs peuvent améliorer leur propres statistiques et compétences) : la durée de la partie étant de 1 minute, les ennemis s'améliorent 5 à 6 fois par partie
+
+    - Le but premier des ennemis étant de tuer les joueurs, ils analysent à chaque étape de jeu quel est le joueur le plus proche, afin de calculer leur nouvelle direction, et vers où ils vont tirer.
+    
+    - Si un ennemi arrive sur un joueur et rentre en collision avec lui, il lui infligera des dégâts périodiquement (toutes les 2 ou 3 secondes), forçant le joueur à fuir ou se mettre en hauteur sur des rochers.

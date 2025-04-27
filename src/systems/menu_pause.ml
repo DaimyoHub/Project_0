@@ -26,7 +26,7 @@ let update _dt el =
     Gfx.set_color ctx color;
     let is_first_player = player#name = "player1" in
     let lines = [
-      player#name;
+      player#name ^ " (HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv ^ ")") else " DEAD)");
       "";
       "";
       "HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv) else "Dead");
@@ -43,26 +43,55 @@ let update _dt el =
     ) lines
   in
 
+  let print_common_stats p = 
+    Gfx.set_color ctx (Gfx.color 213 129 247 255);
+
+    let i = 36 in
+
+    let text_surface = Gfx.render_text ctx ("Attack Damage: "^(string_of_int p#getDmgPerBullet)) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20);
+
+    let text_surface = Gfx.render_text ctx ("Move Speed: "^(string_of_float p#get_ms)) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20+i*2);
+
+    let text_surface = Gfx.render_text ctx ("Armor: "^(string_of_int p#get_armor)) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20+i*3);
+
+    let text_surface = Gfx.render_text ctx ("Shield: "^(string_of_int p#get_shield)) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20+i*4);
+
+    let text_surface = Gfx.render_text ctx ("Bullet Size: "^(string_of_int (p#get_bullet_size-1))) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20+i*5);
+
+    let text_surface = Gfx.render_text ctx ("Attack Speed: "^(string_of_int (120 - p#get_max_atk_speed))) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20+i*6);
+
+    let text_surface = Gfx.render_text ctx ("Bullet Speed: "^(string_of_float p#get_bullet_speed)) font in
+    Gfx.blit ctx surface text_surface 120 (Cst.window_height/2-20+i);
+  in
+
+  let common_stats_printed = ref false in
+
   begin match !player1 with
-  | Some p -> draw_player_stats p 120 36 (Gfx.color 255 100 100 255)
+  | Some p -> draw_player_stats p 120 36 (Gfx.color 255 100 100 255); if (not (!common_stats_printed)) then (print_common_stats p; common_stats_printed:=true)
   | None -> ()
   end;
 
   begin match !player2 with
-  | Some p -> draw_player_stats p (Cst.window_width - 320) 36 (Gfx.color 135 206 235 255)
+  | Some p -> draw_player_stats p (Cst.window_width - 320) 36 (Gfx.color 135 206 235 255); if (not (!common_stats_printed)) then (print_common_stats p; common_stats_printed:=true)
   | None -> ()
   end;
 
-  Gfx.set_color ctx (Gfx.color 255 255 255 255);
-  let text_surface = Gfx.render_text ctx ("M ->  Open the Menu") font in
-  Gfx.blit ctx surface text_surface 270 (Cst.window_height-130);
+  let font = Gfx.load_font "ComicSansMS" "" 35 in
 
   Gfx.set_color ctx (Gfx.color 255 255 255 255);
-  let text_surface = Gfx.render_text ctx ("P  ->  Continue") font in
-  Gfx.blit ctx surface text_surface 270 (Cst.window_height-100);
+  let text_surface = Gfx.render_text ctx ("'M' ->  Open the Menu") font in
+  Gfx.blit ctx surface text_surface (Cst.window_width - 350) (Cst.window_height-260);
 
-  Gfx.set_color ctx (Gfx.color 255 255 255 255);
-  let text_surface = Gfx.render_text ctx ("R  ->  Restart") font in
-  Gfx.blit ctx surface text_surface 270 (Cst.window_height-70);
+  let text_surface = Gfx.render_text ctx ("'P'  ->  Continue") font in
+  Gfx.blit ctx surface text_surface (Cst.window_width - 350) (Cst.window_height-220);
+
+  let text_surface = Gfx.render_text ctx ("'R'  ->  Restart") font in
+  Gfx.blit ctx surface text_surface (Cst.window_width - 350) (Cst.window_height-180);
 
   Gfx.commit ctx

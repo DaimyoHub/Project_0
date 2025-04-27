@@ -87,7 +87,7 @@ let random_augment_pair () =
 
 let init _ = ()
 
-let update _dt el =
+let update _ el =
   (* check if augment has been chosen *)
   match !(Global.chosen_option) with 
   | None -> 

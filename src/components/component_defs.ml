@@ -124,7 +124,7 @@ class player name =
       melee_counter <- melee_counter + 1 
 
     method is_p_resurrected = is_resurrected
-    method resurrect = is_resurrected <- true 
+    method resurrect = is_resurrected <- true; pv <- 1 
     method resurection_completed = (is_resurrected <- false; is_dead <- false)
 
     method get_bullet_speed = bullet_speed 
@@ -194,8 +194,7 @@ class player name =
       else if atk_speed>=75 then 
         atk_speed <- atk_speed - 4
       else if atk_speed>=60 then 
-        atk_speed <- atk_speed - 4 
-      else Gfx.debug "Atk speed cap reached\n%!"
+        atk_speed <- atk_speed - 1 
   end
 
 class map_pixel =
