@@ -11,7 +11,7 @@
 
 ## Gameplay
 
-- Le but du jeu est de réussir à survivre 1 minute sur la carte en ayant le plus d'éléminations d'ennemis que possible
+- Le but du jeu est de réussir à survivre 1 minute sur la carte en ayant le plus d'éliminations d'ennemis possible.
 
 - Les touches sont affichées en jeu, il suffit d'aller sur le Menu avec la touche 'm', toutes les touches y sont décrites, ainsi que les statistiques des joueurs sur la partie actuelle.
 
