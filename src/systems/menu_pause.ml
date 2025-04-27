@@ -27,10 +27,6 @@ let update _dt el =
     let is_first_player = player#name = "player1" in
     let lines = [
       player#name ^ " (HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv ^ ")") else " DEAD)");
-      "";
-      "";
-      "HP: " ^ (if not player#is_dead then (string_of_int player#getPv ^ "/" ^ string_of_int player#getMaxPv) else "Dead");
-      "";
       "Movement: " ^ (if is_first_player then "z q s d" else "i j k l");
       "Jump: " ^ (if is_first_player then "a" else "u");
       "Create a Portal: " ^ (if is_first_player then "w" else "n");
@@ -85,13 +81,13 @@ let update _dt el =
   let font = Gfx.load_font "ComicSansMS" "" 35 in
 
   Gfx.set_color ctx (Gfx.color 255 255 255 255);
-  let text_surface = Gfx.render_text ctx ("'M' ->  Open the Menu") font in
+  let text_surface = Gfx.render_text ctx ("M: Open the Menu") font in
   Gfx.blit ctx surface text_surface (Cst.window_width - 350) (Cst.window_height-260);
 
-  let text_surface = Gfx.render_text ctx ("'P'  ->  Continue") font in
+  let text_surface = Gfx.render_text ctx ("P: Continue") font in
   Gfx.blit ctx surface text_surface (Cst.window_width - 350) (Cst.window_height-220);
 
-  let text_surface = Gfx.render_text ctx ("'R'  ->  Restart") font in
+  let text_surface = Gfx.render_text ctx ("R: Restart") font in
   Gfx.blit ctx surface text_surface (Cst.window_width - 350) (Cst.window_height-180);
 
   Gfx.commit ctx
