@@ -27,12 +27,12 @@ let update _dt el =
       if (player#name = "player1") then
         let font = Gfx.load_font "ComicSansMS" "" 32 in
         Gfx.set_color ctx (Gfx.color 255 100 100 255);
-        let text_surface = Gfx.render_text ctx ("P1 : "^ (string_of_int player#getPv)^"/20") font in
+        let text_surface = Gfx.render_text ctx ("P1 : "^ (string_of_int player#getPv)^"/"^(string_of_int player#getMaxPv)) font in
         Gfx.blit ctx surface text_surface 100 30
       else (
         let font = Gfx.load_font "ComicSansMS" "" 32 in
         Gfx.set_color ctx (Gfx.color 135 206 235 255);
-        let text_surface = Gfx.render_text ctx ("P2 : "^ (string_of_int player#getPv)^"/20") font in
+        let text_surface = Gfx.render_text ctx ("P2 : "^ (string_of_int player#getPv)^"/"^(string_of_int player#getMaxPv)) font in
         Gfx.blit ctx surface text_surface 250 30
       )
     )
@@ -45,7 +45,11 @@ let update _dt el =
   let font = Gfx.load_font "ComicSansMS" "" 28 in
   Gfx.set_color ctx (Gfx.color 200 160 255 255);
   let text_surface = Gfx.render_text ctx ((string_of_int (!Global.kill_counter)^" kills")) font in
-  Gfx.blit ctx surface text_surface (Cst.window_width-120) 32;
+  Gfx.blit ctx surface text_surface (Cst.window_width-330) 32;
 
+  let font = Gfx.load_font "ComicSansMS" "" 28 in
+  Gfx.set_color ctx (Gfx.color 255 255 255 255);
+  let text_surface = Gfx.render_text ctx ("Time left : "^(string_of_int (Cst.max_time - int_of_float (_dt/.1000.)))) font in
+  Gfx.blit ctx surface text_surface (Cst.window_width-220) 32;
 
   Gfx.commit ctx

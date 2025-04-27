@@ -25,16 +25,16 @@ let create (idx, name, x, y, width, height) =
     match t#tag#get with
     | HWall w -> (
         (if w#position#get.y <> 0. then
-          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_down else Cst.j2_v_down))
+          e#position#set (Vector.sub e#position#get (if name="player1" then (Vector.mult e#get_ms Cst.j1_v_down) else (Vector.mult e#get_ms Cst.j2_v_down)))
         else
-          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_up else Cst.j2_v_up))
+          e#position#set (Vector.sub e#position#get (if name="player1" then (Vector.mult e#get_ms Cst.j1_v_up) else (Vector.mult e#get_ms Cst.j2_v_up)))
         );
         e#velocity#set Vector.zero)
     | VWall (_, w) -> (
         (if w#position#get.x <> 0. then
-          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_right else Cst.j2_v_right))
+          e#position#set (Vector.sub e#position#get (if name="player1" then (Vector.mult e#get_ms Cst.j1_v_right) else (Vector.mult e#get_ms Cst.j2_v_right)))
         else
-          e#position#set (Vector.sub e#position#get (if name="player1" then Cst.j1_v_left else Cst.j2_v_left))
+          e#position#set (Vector.sub e#position#get (if name="player1" then (Vector.mult e#get_ms Cst.j1_v_left) else (Vector.mult e#get_ms Cst.j2_v_left)))
         );
         e#velocity#set Vector.zero)
     | Mappix pix -> (
@@ -137,6 +137,7 @@ let create (idx, name, x, y, width, height) =
   Collide_system.(register (e :> t));
   Move_system.(register (e :> t));
   Wind_system.(register (e :> t));
+  Augments_system.(register (e :> t));
   e
 
 (**
@@ -291,18 +292,29 @@ let set_focused_map_pixel () =
   set_focused_pixel_texture (player1 ());
   set_focused_pixel_texture (player2 ())
 
-
+let handle_ressurect () =
+  let inner player =
+    if player#is_p_resurrected then
+      (
+        Draw_system.(register (player :> t));
+        Collide_system.(register (player :> t));
+        Move_system.(register (player :> t));
+        Wind_system.(register (player :> t));
+        player#resurection_completed;
+        true
+      )
+    else false
+  in
+  (inner (player1 ()),inner (player2 ()))
+  
 let handle_death () =
   let inner player =
     if player#getPv <=0 then
       (
-        Gfx.debug "%s is dead\n%!" player#name;
-
         player#setPv 1;
 
         player#kill_player;
 
-        player#position#set (Vector.zero);
         Draw_system.(unregister (player :> t));
         Collide_system.(unregister (player :> t));
         Move_system.(unregister (player :> t));
@@ -351,3 +363,12 @@ let handle_shooting () =
 
   inner (player1 ());
   inner (player2 ())
+
+let players_are_dead () =
+  (player1 ())#is_dead && (player2 ())#is_dead
+
+let p1_is_dead () =
+  (player1 ())#is_dead
+
+let p2_is_dead () =
+  (player2 ())#is_dead

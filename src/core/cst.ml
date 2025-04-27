@@ -63,9 +63,13 @@ let font_color = Gfx.color 0 0 0 255
 
 let wind_timing_swap = 10000.
 
-let mobTerrestreHeight = 18
-let mobTerrestreWidth = 18
+let mobTerrestreHeight = 21
+let mobTerrestreWidth = 21
 
 let mobTerrestreVelocity = Vector.zero
 
-let mob_spawn_timer = 5000.
+let mob_spawn_timer = 6000.
+
+let max_time = 180 (* length of the game in seconds *)
+
+let max_amount_of_mobs = 5

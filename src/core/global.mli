@@ -1,5 +1,18 @@
 open Component_defs
 
+type augment_type = 
+| HP
+| REGEN
+| SHIELD
+| BULLETSPEED
+| ATKSPEED
+| MS
+| DMG 
+| ARMOR
+| BULLETSIZE
+| REZ1
+| REZ2
+
 type t = {
   window : Gfx.window;
   ctx : Gfx.context;
@@ -27,3 +40,11 @@ val get : unit -> t
 val set : t -> unit
 
 val kill_counter : int ref
+
+val players_are_dead : bool ref
+
+val chosen_option : bool option ref
+
+val current_augments : (augment_type * augment_type) option ref
+
+val new_augment_to_select : bool ref

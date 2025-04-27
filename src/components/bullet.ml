@@ -14,10 +14,11 @@ let create player dmg =
   let vel = player#velocity#get in 
   if (not (Vector.is_zero vel)) then
     let bullet = new bullet () in
+    (* Gfx.debug "%i \n%!" player#get_bullet_size; *)
     bullet#tag#set (Bullet bullet);
-    bullet#box#set Rect.{ width = 4; height = 4 };
+    bullet#box#set Rect.{ width = player#get_bullet_size; height = player#get_bullet_size };
 
-    bullet#velocity#set (Vector.mult 3. player#velocity#get);
+    bullet#velocity#set (Vector.mult (2.+.player#get_bullet_speed) player#velocity#get);
 
     bullet#position#set (Vector.add player#position#get (Vector.mult 10. player#velocity#get));
 
@@ -73,7 +74,7 @@ let mob_create mob dmg =
 
     bullet#velocity#set (Vector.mult 3. mob#velocity#get);
 
-    bullet#position#set (Vector.add mob#position#get (Vector.mult 18. mob#velocity#get));
+    bullet#position#set (Vector.add mob#position#get (Vector.mult 21. mob#velocity#get));
 
     Draw_system.register    (bullet :> Draw_system.t);
     Move_system.register    (bullet :> Move_system.t);

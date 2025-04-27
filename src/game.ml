@@ -35,6 +35,16 @@ let prepare_config window ctx texture_handler =
 let update dt =
   let () = Input.handle_input () in
 
+  let (p1_resurrect, p2_resurrect) = Player.handle_ressurect () in 
+  if p1_resurrect then 
+  (
+    Input.register_player true
+  );
+  if p2_resurrect then
+  (
+    Input.register_player false
+  );
+
   Player.set_focused_map_pixel ();
   Player.handle_jump_animation ();
   Player.handle_shooting ();
@@ -70,15 +80,52 @@ let update dt =
     Wind_particle.respawn_particles_at_right ()
   );
 
+  (* Check if this is the end of the game *)
+  if ((Player.players_are_dead ())) then (
+    Global.players_are_dead := true;
+    Global.set_game_state End_screen
+  );
+  if (Cst.max_time - int_of_float (dt/.1000.))<0 then (
+    Global.set_game_state End_screen
+  );
+
   let _ = 
     match Global.get_game_state () with
     | Game -> begin
+      if (!Global.new_augment_to_select) then (
+        Input.register "v" (fun () ->
+          Global.chosen_option := Some true
+        );
+        Input.register "b" (fun () ->
+          Global.chosen_option := Some false
+        );
+        let chosen_augments = (
+          if (Player.p1_is_dead ()) then
+            (Global.REZ1, Augments.random_augment ())
+          else if (Player.p2_is_dead ()) then 
+            (Global.REZ2, Augments.random_augment ())
+          else
+            Augments.random_augment_pair ()
+        ) in
+        Global.current_augments := Some chosen_augments;
+        Global.chosen_option := None;
+        Global.set_game_state Augments
+      ) else (
+        Input.unregister "v";
+        Input.unregister "b";
         Move_system.update dt;
         Collide_system.update dt;
         Draw_system.update dt;
-        Wind_system.update dt;
+        Wind_system.update dt
+      )
       end
-    | Menu -> Menu_system.update dt
+    | Augments -> (
+      Global.new_augment_to_select := false;
+      Augments_system.update dt
+    )
+    | End_screen -> (
+      End_screen.update dt
+    )
   in
 
   None

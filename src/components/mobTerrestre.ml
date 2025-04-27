@@ -3,7 +3,7 @@ open Component_defs
 open System_defs
 open Tag
 
-let all_mobs : (int, mobTerrestre) Hashtbl.t = Hashtbl.create 10
+let all_mobs : (int, mobTerrestre) Hashtbl.t = Hashtbl.create 6
 let mob_id_counter = ref 0
 
 let create x y dt =
@@ -63,7 +63,7 @@ let create x y dt =
 
 let last_creation = ref 0.
 let handle_mob_terrestre_creation dt =
-  if (dt -. !last_creation) > Cst.mob_spawn_timer then (
+  if (Cst.max_amount_of_mobs > (Hashtbl.length all_mobs)) && (dt -. !last_creation) > Cst.mob_spawn_timer then (
     last_creation := dt;
 
     let edge = Random.int 4 in
@@ -160,6 +160,7 @@ let update_mobs_turn () =
   ) all_mobs;
 
   List.iter (fun id ->
+    Global.new_augment_to_select := true;
     Global.kill_counter := !Global.kill_counter + 1;
     let mob = Hashtbl.find all_mobs id in
     Draw_system.unregister (mob :> drawable);

@@ -1,5 +1,18 @@
 open Component_defs
 
+type augment_type = 
+| HP
+| REGEN
+| SHIELD
+| BULLETSPEED
+| ATKSPEED
+| MS
+| DMG 
+| ARMOR
+| BULLETSIZE
+| REZ1
+| REZ2
+
 type t = {
   window : Gfx.window;
   ctx : Gfx.context;
@@ -19,7 +32,6 @@ type t = {
 
   particles: particle list;
 }
-
 let state = ref None
 
 let get () : t =
@@ -36,3 +48,11 @@ let set_game_state game_state =
 let set s = state := Some s
 
 let kill_counter = ref 0
+
+let players_are_dead = ref false
+
+let chosen_option = ref None
+
+let current_augments = ref None
+
+let new_augment_to_select = ref false
