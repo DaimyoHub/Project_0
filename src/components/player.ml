@@ -131,6 +131,8 @@ let create (idx, name, x, y, width, height) =
           e#losePv (b#getDmg);
           (* Gfx.debug "%s Losing pv : %i remaining \n%!" e#name e#getPv *)
       )
+    | MobTerrestre mob ->
+        if e#is_melee_triggered then mob#losePv e#getDmgPerBullet
     | _ -> ());
 
   Draw_system.(register (e :> t));
@@ -193,7 +195,7 @@ let set_texture player texture =
    (phase 0) or can be jumping (phase 1, 2, 3). The computed texture is the
    next texture that should be given to [player].
  *)
-let compute_texture player jp =
+let compute_jump_texture player jp =
   let open Texture in
   let is_one = 
     let compute = function Player (idx, _) -> idx = One | _ -> false
@@ -231,10 +233,57 @@ let compute_texture player jp =
         if is_one then Player_1_left_jump_0 else Player_2_left_jump_0
       else (* if jp = 1 then *)
         if is_one then Player_1_left_jump_1 else Player_2_left_jump_1
+
+(**
+   Player.compute_texture player jumping_phase
+
+   Computes the convenient texture of [player] according to the [jumping_phase]
+   and the direction of [player]. The player can be preparing itself to jump
+   (phase 0) or can be jumping (phase 1, 2, 3). The computed texture is the
+   next texture that should be given to [player].
+ *)
+let compute_melee_texture player mp =
+  let open Texture in
+  let is_one = 
+    let compute = function Player (idx, _) -> idx = One | _ -> false
+    in compute player#tag#get
+  in
+  let v = Vector.normalize player#velocity#get in
+
+  if v.x = 0. then
+    if v.y > 0. then
+      if mp = 2 then
+        if is_one then Player_1_bottom else Player_2_bottom
+      else if mp = 1 then
+        if is_one then Player_1_bottom_melee_0 else Player_2_bottom_melee_0
+      else (* if mp = 0 then *)
+        if is_one then Player_1_bottom_melee_1 else Player_2_bottom_melee_1
+    else
+      if mp = 2 then
+        if is_one then Player_1_top else Player_2_top
+      else if mp = 1 then
+        if is_one then Player_1_top_melee_0 else Player_2_top_melee_0
+      else (* if mp = 0 then *)
+        if is_one then Player_1_top_melee_1 else Player_2_top_melee_1
+  else
+    if v.x > 0. then
+      if mp = 2 then
+        if is_one then Player_1_right else Player_2_right
+      else if mp = 1 then
+        if is_one then Player_1_right_melee_0 else Player_2_right_melee_0
+      else (* if mp = 0 then *)
+        if is_one then Player_1_right_melee_1 else Player_2_right_melee_1
+    else
+      if mp = 2 then
+        if is_one then Player_1_left else Player_2_left
+      else if mp = 1 then
+        if is_one then Player_1_left_melee_0 else Player_2_left_melee_0
+      else (* if mp = 0 then *)
+        if is_one then Player_1_left_melee_1 else Player_2_left_melee_1
   
 let jump player timeMilli =
   player#z_position#set (Some timeMilli);
-  set_texture player (compute_texture player 0)
+  set_texture player (compute_jump_texture player 0)
 
 (**
    Player.get_focused_map_pixel player map
@@ -330,20 +379,44 @@ let handle_death () =
    Player.handle_jump_animation ()
 
    Handles the jumping animation of both players. It decides the phases of the
-   jumping animation and sets the dedicated texture thanks to compute_texture.
+   jumping animation and sets the dedicated texture thanks to compute_jump_texture.
  *)
 let handle_jump_animation () =
   let inner player =
     if player#is_jumping then
       if player#get_jumping_anim_counter < 60 then (
         (if player#get_jumping_anim_counter < 40 then
-          set_texture player (compute_texture player 1)
+          set_texture player (compute_jump_texture player 1)
         else if player#get_jumping_anim_counter < 55 then
-          set_texture player (compute_texture player 2));
+          set_texture player (compute_jump_texture player 2));
         player#incr_jumping_anim_counter)
       else (
         player#reinit_jumping_anim_counter;
-        set_texture player (compute_texture player 3))
+        set_texture player (compute_jump_texture player 3))
+    else ()
+  in
+
+  inner (player1 ());
+  inner (player2 ())
+
+(**
+   Player.handle_jump_animation ()
+
+   Handles the jumping animation of both players. It decides the phases of the
+   jumping animation and sets the dedicated texture thanks to compute_jump_texture.
+ *)
+let handle_melee_animation () =
+  let inner player =
+    if player#is_melee_triggered then
+      if player#get_melee_counter < 30 then (
+        (if player#get_melee_counter < 15 then
+          set_texture player (compute_melee_texture player 0)
+        else
+          set_texture player (compute_melee_texture player 1));
+        player#incr_melee_counter)
+      else (
+        player#reinit_melee_counter;
+        set_texture player (compute_melee_texture player 2))
     else ()
   in
 

@@ -82,6 +82,7 @@ let update dt =
 
       Player.set_focused_map_pixel ();
       Player.handle_jump_animation ();
+      Player.handle_melee_animation ();
       Player.handle_shooting ();
       MobTerrestre.update_mobs_turn ();
       MobTerrestre.handle_mob_terrestre_creation dt;
