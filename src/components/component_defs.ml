@@ -113,7 +113,7 @@ class player name =
     val mutable is_resurrected = false
 
     method is_p_resurrected = is_resurrected
-    method resurrect = is_resurrected <- true 
+    method resurrect = is_resurrected <- true; pv <- 1 
     method resurection_completed = (is_resurrected <- false; is_dead <- false)
 
     method get_bullet_speed = bullet_speed 
@@ -183,7 +183,7 @@ class player name =
       else if atk_speed>=75 then 
         atk_speed <- atk_speed - 4
       else if atk_speed>=60 then 
-        atk_speed <- atk_speed - 4 
+        atk_speed <- atk_speed - 1 
       else Gfx.debug "Atk speed cap reached\n%!"
   end
 
