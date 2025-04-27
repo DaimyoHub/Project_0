@@ -54,7 +54,8 @@ let update dt =
     Input.unregister "s";
     Input.unregister "e";
     Input.unregister "a";
-    Input.unregister "w"
+    Input.unregister "w";
+    Input.unregister "x";
   );
   if p2_death then 
   (
@@ -64,7 +65,8 @@ let update dt =
     Input.unregister "i";
     Input.unregister "n";
     Input.unregister "o";
-    Input.unregister "u"
+    Input.unregister "u";
+    Input.unregister ",";
   ); 
 
   (* Check if this is the end of the game *)

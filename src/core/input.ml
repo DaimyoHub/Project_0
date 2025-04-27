@@ -55,11 +55,10 @@ let register_player first_player =
         p1#incr_shooting_counter
       end);
 
-    register "_" (fun () ->
+    register "x" (fun () ->
       let p1 = Player.player1 () in
-      if not p1#is_melee_triggered && not p1#is_jumping then begin
-        p1#incr_melee_counter
-      end);
+      if not p1#is_melee_triggered && not p1#is_jumping then
+        p1#incr_melee_counter);
   )
   else 
   (
@@ -103,6 +102,11 @@ let register_player first_player =
       Player.(jump p2 (Unix.gettimeofday ()));
       p2#incr_jumping_anim_counter;
       Player.set_texture p2 (Player.compute_jump_texture p2 0));  
+
+    register "," (fun () ->
+      let p2 = Player.player2 () in
+      if not p2#is_melee_triggered && not p2#is_jumping then
+        p2#incr_melee_counter);
   )
 ;;
 
