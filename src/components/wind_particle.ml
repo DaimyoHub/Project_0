@@ -72,7 +72,7 @@ let respawn_particles_at_right () =
  *)
 let create () =
   Random.self_init ();
-  let particles = List.init 6
+  let particles = List.init 8
     (fun _ ->
       let p = new particle () in
 

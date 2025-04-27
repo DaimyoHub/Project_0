@@ -60,3 +60,5 @@ let new_augment_to_select = ref false
 let game_time_start = ref (Unix.gettimeofday ())
 
 let start_pause_time = ref 0.
+
+let start_menu_pause_time = ref None

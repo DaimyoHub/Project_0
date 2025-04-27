@@ -52,3 +52,5 @@ val new_augment_to_select : bool ref
 val game_time_start : float ref
 
 val start_pause_time : float ref
+
+val start_menu_pause_time : float option ref

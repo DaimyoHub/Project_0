@@ -138,6 +138,7 @@ let create (idx, name, x, y, width, height) =
   Move_system.(register (e :> t));
   Wind_system.(register (e :> t));
   Augments_system.(register (e :> t));
+  Menu_pause.(register (e :> t));
   e
 
 (**

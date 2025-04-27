@@ -1,1 +1,1 @@
-type t = Game | Augments | End_screen
+type t = Game | Augments | End_screen | Menu_pause

@@ -113,5 +113,16 @@ let handle_input () =
 
 let () = 
   register_player true;
-  register_player false
-
+  register_player false;
+  register "m" (fun () ->
+    Global.start_menu_pause_time := Some (Unix.gettimeofday ());
+    Global.set_game_state State.Menu_pause);
+  register "p" (fun () ->
+    match !Global.start_menu_pause_time with 
+    | None -> ()
+    | Some start_time -> (
+    let pause_time = Unix.gettimeofday () -. start_time in 
+    Global.game_time_start := !Global.game_time_start +. pause_time;
+    Global.start_menu_pause_time := None;
+    Global.set_game_state State.Game)
+  );

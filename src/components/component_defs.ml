@@ -126,7 +126,9 @@ class player name =
     method increase_bullet_size = bullet_size <- bullet_size + 1
 
     method get_a_shield = shield <- shield + 1
+    method get_shield = shield
 
+    method get_armor = armor
     method increase_armor = armor <- armor + 1
 
     method kill_player = is_dead <- true
@@ -232,7 +234,7 @@ class mobTerrestre () =
     inherit resolver ()
     inherit z_position ()
 
-    val mutable atk_speed = 100
+    val mutable atk_speed = 3.
     val mutable pv = 5
     val mutable dmgPerBullet = 5
     val mutable lastDmgWhenOnPlayer = Unix.gettimeofday ()
@@ -251,10 +253,12 @@ class mobTerrestre () =
     method setPv amount = pv <- pv + amount
     method losePv amount = pv <- pv - amount
     method getDmgPerBullet = dmgPerBullet
+    method set_atk_speed amount = atk_speed <- amount
+    method set_dmg amount = dmgPerBullet <- amount
 
     method is_the_mob_shooting = (
       let curr_time = Unix.gettimeofday () in 
-      if (curr_time-.lastShootTiming>3.) then (
+      if (curr_time-.lastShootTiming>atk_speed) then (
         lastShootTiming <- curr_time;
         true
       ) else false

@@ -14,8 +14,8 @@ let string_of_augment_type augm =
   | Global.DMG -> "more Damage"
   | Global.ARMOR -> "more Armor"
   | Global.BULLETSIZE -> "Bigger Bullets"
-  | Global.REZ1 -> "Resurrect P1 (but lose an additional augment)"
-  | Global.REZ2 -> "Resurrect P2 (but lose an additional augment)"
+  | Global.REZ1 -> "the Resurrection of P1"
+  | Global.REZ2 -> "the Resurrection of P2"
 
 let color_of_augment_type augm = 
   match augm with 
@@ -28,7 +28,7 @@ let color_of_augment_type augm =
   | Global.DMG -> Gfx.color 255 69 0 255
   | Global.ARMOR -> Gfx.color 169 169 169 255
   | Global.BULLETSIZE -> Gfx.color 255 215 0 255
-  | Global.REZ1 | Global.REZ2 -> Gfx.color 255 250 29 255
+  | Global.REZ1 | Global.REZ2 -> Gfx.color 200 200 29 255
 
 let add_augment player augm =
   match augm with   

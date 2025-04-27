@@ -129,6 +129,9 @@ let update dt =
     | End_screen -> (
       End_screen.update dt
     )
+    | Menu_pause -> (
+      Menu_pause.update dt
+    )
   in
 
   None

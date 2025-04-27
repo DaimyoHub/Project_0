@@ -4,14 +4,18 @@ open System_defs
 open Tag
 
 let all_mobs : (int, mobTerrestre) Hashtbl.t = Hashtbl.create 6
-let mob_id_counter = ref 0
+let mob_id_counter = ref 1
 
 let create x y dt =
   let open Tag in 
   let e = new mobTerrestre () in 
 
+  (* la force d'un mob dépend du combien-ième il est à spawn:
+   tous les 5 spawns, ils sont renforcés*)
+
   let id = !mob_id_counter in
   mob_id_counter := id + 1;
+  let ratio_amelioration = !mob_id_counter / 5 in
   Hashtbl.add all_mobs id e;
 
   e#tag#set (MobTerrestre e);
@@ -20,8 +24,7 @@ let create x y dt =
   let width = Cst.mobTerrestreWidth in 
   e#box#set Rect.{width;height};
   let velocity = Cst.mobTerrestreVelocity in 
-  e#velocity#set velocity;
-
+  e#velocity#set (Vector.mult (float_of_int ratio_amelioration) velocity);
   e#resolve#set (fun _ t ->
     match t#tag#get with 
     | HWall w -> (
@@ -54,7 +57,12 @@ let create x y dt =
       let amount = e#handleDmgGetWhenMobOnPlayer in
       p#losePv amount;
     )
-    | _ -> ());
+    | _ -> ()
+  );
+
+  e#setPv (5+2*ratio_amelioration);
+  e#set_dmg (5+(3*ratio_amelioration));
+  e#set_atk_speed (3.-.(0.2*.(float_of_int ratio_amelioration)));
 
   Draw_system.(register (e :> t));
   Collide_system.(register (e :> t));
